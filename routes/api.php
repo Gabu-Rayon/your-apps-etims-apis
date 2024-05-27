@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InsuranceController;
@@ -16,3 +17,4 @@ use App\Http\Controllers\InsuranceController;
 
 
 Route::apiResource('insurance', InsuranceController::class);
+Route::apiResource('purchase', PurchaseController::class);
