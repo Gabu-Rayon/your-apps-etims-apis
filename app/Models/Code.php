@@ -10,6 +10,16 @@ class Code extends Model
     use HasFactory;
 
     protected $fillable = [
-        
+        "cdCls",
+        "cdClsNm",
+        "cdClsDesc",
+        "useYn",
+        "userDfnNm1",
+        "userDfnNm2",
+        "userDfnNm3"
     ];
+
+    public function details () {
+        return $this->hasMany(Detail::class, 'cdCls', 'cdCls');
+    }
 }

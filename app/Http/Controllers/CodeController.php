@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Code;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CodeController extends Controller
 {
@@ -12,7 +13,22 @@ class CodeController extends Controller
      */
     public function index()
     {
-        //
+        try {
+            $codes = Code::all();
+            Log::info('Codes retrieved successfully');
+            Log::info($codes);
+            return response()->json([
+                'message' => 'success',
+                'data' => $codes
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get codes');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get codes',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
