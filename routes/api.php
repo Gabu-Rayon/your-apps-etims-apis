@@ -3,6 +3,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CodeController;
+use App\Http\Controllers\InitializationController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\ItemClassificationController;
 use App\Http\Controllers\NoticeController;
@@ -22,7 +23,8 @@ use App\Http\Controllers\NoticeController;
     return $request->user();
 });
 
-Route::apiResource('GetCodeList', CodeController::class);
-Route::apiResource('GetNoticeList', NoticeController::class);
-Route::apiResource('GetItemClassificationList', ItemClassificationController::class);
+Route::apiResource('GetCodeList', CodeController::class)->only(['index']);
+Route::apiResource('GetNoticeList', NoticeController::class)->only(['index']);
+Route::apiResource('Initialization', InitializationController::class)->only(['index', 'store']);
+Route::apiResource('GetItemClassificationList', ItemClassificationController::class)->only(['index']);
 Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);

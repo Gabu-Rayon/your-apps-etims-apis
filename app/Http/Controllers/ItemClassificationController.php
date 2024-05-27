@@ -19,7 +19,7 @@ class ItemClassificationController extends Controller
                 'message' => 'success',
                 'data' => [
                     "resultCd" => "000",
-                    "resultMsg" => "Successfull",
+                    "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
                         'itemClsList' => $itemClassification

@@ -13,6 +13,19 @@ return new class extends Migration
     {
         Schema::create('branches', function (Blueprint $table) {
             $table->id();
+            $table->string('bhfId', 10)->unique();
+            $table->string('bhfNm', 100);
+            $table->string('bhfSttsCd', 100);
+            $table->string('prvncNm', 100);
+            $table->string('dstrtNm', 100);
+            $table->string('sctrNm', 100);
+            $table->string('locDesc', 100);
+            $table->string('mgrNm', 100);
+            $table->string('mgrTelNo', 100);
+            $table->string('mgrEmail', 100);
+            $table->string('hqYn', 100);
+
+            $table->index('bhfId');
             $table->timestamps();
         });
     }

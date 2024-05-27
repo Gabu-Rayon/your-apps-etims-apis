@@ -13,6 +13,11 @@ return new class extends Migration
     {
         Schema::create('initializations', function (Blueprint $table) {
             $table->id();
+            $table->string('tin');
+            $table->string('bhfId');
+            $table->string('dvcSrlNo');
+
+            $table->foreign('bhfId')->references('bhfId')->on('branches');
             $table->timestamps();
         });
     }

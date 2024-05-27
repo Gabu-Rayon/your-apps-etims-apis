@@ -4,62 +4,84 @@ namespace App\Http\Controllers;
 
 use App\Models\Initialization;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class InitializationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
+    public function index() {
+        try {
+            $initializations = Initialization::all();
+            $now = date('YmdHis');
+            Log::info('Initializations retrieved successfully');
+            Log::info($initializations);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'initsLst' => $initializations
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get Initializations');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get Initializations',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
+    public function store(Request $request) {
+        try {
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Initialization $initialization)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Initialization $initialization)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Initialization $initialization)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Initialization $initialization)
-    {
-        //
+            $data = $request->all();
+            $validator = Validator::make($request->all(), [
+                'tin' => 'required|size:11',
+                'bhfId' => 'required|size:2',
+                'dvcSrlNo' => 'required|min:1'
+            ]);
+        
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => $validator->errors()->all()
+                ], 400);
+            }
+            
+            $initialization = new Initialization();
+            $initialization->tin = $request->tin;
+            $initialization->bhfId = $request->bhfId;
+            $initialization->dvcSrlNo = $request->dvcSrlNo;
+            $initialization->save();
+            $now = date('YmdHis');
+            Log::info('Initialization created successfully');
+            Log::info($initialization);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'init' => $initialization
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to create initialization');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to create initialization',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
