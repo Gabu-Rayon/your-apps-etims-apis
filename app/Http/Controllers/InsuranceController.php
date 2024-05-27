@@ -55,7 +55,7 @@ class InsuranceController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'bhfUsr' => $insurance
+                        'insurance' => $insurance
                     ]
                 ]
             ]);
