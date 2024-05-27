@@ -15,4 +15,4 @@ use App\Http\Controllers\InsuranceController;
 */
 
 
-Route::resource('insurance', InsuranceController::class);
+Route::apiResource('insurance', InsuranceController::class);
