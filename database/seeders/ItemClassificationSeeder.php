@@ -30,7 +30,6 @@ class ItemClassificationSeeder extends Seeder
                 "mjrTgYn" => false,
                 "useYn" => true,
             ],
-            // Add more data as needed
         ];
 
         foreach ($data as $item) {

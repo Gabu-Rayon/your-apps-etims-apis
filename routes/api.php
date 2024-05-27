@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\ItemClassificationController;
+use App\Http\Controllers\NoticeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,5 +23,6 @@ use App\Http\Controllers\ItemClassificationController;
 });
 
 Route::apiResource('GetCodeList', CodeController::class);
+Route::apiResource('GetNoticeList', NoticeController::class);
 Route::apiResource('GetItemClassificationList', ItemClassificationController::class);
 Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
