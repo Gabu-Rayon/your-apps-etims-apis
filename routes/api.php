@@ -22,6 +22,3 @@ Route::apiResource('GetCodeList', CodeController::class);
 
 Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
 // Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance'])->middleware('apikey');
-
-Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
-// Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance'])->middleware('apikey');
