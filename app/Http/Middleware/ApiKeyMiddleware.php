@@ -12,8 +12,13 @@ class ApiKeyMiddleware
     {
         $apiKeyValue = $request->header('ApiKey');
 
+
+        \Log ::info('Api key from the Postman headers: ' . $apiKeyValue);
+
         // API key from the db
         $apiKey = ApiKey::where('key', $apiKeyValue)->first();
+
+        \Log::info('Api key from the Db: ' . $apiKey);
 
         // Check API key exists and is active
         if (!$apiKey || !$apiKey->isUsed || !$apiKey->activated) {
