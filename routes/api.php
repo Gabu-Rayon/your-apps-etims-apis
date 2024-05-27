@@ -8,6 +8,7 @@ use App\Http\Controllers\CodeController;
 use App\Http\Controllers\InitializationController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\ItemClassificationController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\NoticeController;
 
 /*
@@ -29,6 +30,7 @@ Route::apiResource('GetCodeList', CodeController::class)->only(['index']);
 Route::apiResource('GetNoticeList', NoticeController::class)->only(['index']);
 Route::apiResource('GetBranchList', BranchController::class)->only(['index']);
 Route::apiResource('AddBranchUser', BranchUserController::class)->only(['index', 'store']);
+Route::apiResource('ItemsList', ItemController::class)->only(['index', 'store', 'update']);
 Route::apiResource('Initialization', InitializationController::class)->only(['index', 'store']);
 Route::apiResource('GetItemClassificationList', ItemClassificationController::class)->only(['index']);
 Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
