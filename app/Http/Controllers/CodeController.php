@@ -15,6 +15,7 @@ class CodeController extends Controller
     {
         try {
             $codes = Code::all();
+            $now = date('YmdHis');
             foreach ($codes as $code) {
                 $code['dtlList'] = $code->details()->get();
             }
@@ -22,7 +23,14 @@ class CodeController extends Controller
             Log::info($codes);
             return response()->json([
                 'message' => 'success',
-                'data' => $codes
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'clsList' => $codes
+                    ]
+                ]
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to get codes');
