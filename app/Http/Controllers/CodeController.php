@@ -15,6 +15,9 @@ class CodeController extends Controller
     {
         try {
             $codes = Code::all();
+            foreach ($codes as $code) {
+                $code['dtlList'] = $code->details()->get();
+            }
             Log::info('Codes retrieved successfully');
             Log::info($codes);
             return response()->json([
