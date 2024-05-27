@@ -3,7 +3,6 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\InsuranceController;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,5 +13,6 @@ use App\Http\Controllers\InsuranceController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
-// Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance'])->middleware('apikey');
+
+
+Route::resource('insurance', InsuranceController::class);
