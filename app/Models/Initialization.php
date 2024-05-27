@@ -14,4 +14,8 @@ class Initialization extends Model
         "bhfId",
         "dvcSrlNo"
     ];
+
+    public function branch () {
+        return $this->belongsTo(Branch::class, "bhfId", "bhfId");
+    }
 }
