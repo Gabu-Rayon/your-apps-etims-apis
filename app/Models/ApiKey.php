@@ -19,7 +19,7 @@ class ApiKey extends Model
     protected $fillable = [
         'key',
         'isUsed',
-        'activated',      
+        'activated',
     ];
 
     /**
