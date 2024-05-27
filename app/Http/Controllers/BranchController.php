@@ -3,63 +3,37 @@
 namespace App\Http\Controllers;
 
 use App\Models\Branch;
-use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class BranchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(Branch $branch)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Branch $branch)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Branch $branch)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(Branch $branch)
-    {
-        //
+    public function index() {
+        try {
+            $branches = Branch::all();
+            $now = date('YmdHis');
+            Log::info('Branches retrieved successfully');
+            Log::info($branches);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'bhfList' => $branches
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get branches');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get branches',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
