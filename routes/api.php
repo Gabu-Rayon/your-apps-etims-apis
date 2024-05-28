@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\GetPurchaseListController;
+use App\Http\Controllers\MapImportedItemController;
 use App\Http\Controllers\GetImportedItemInformationController;
 
 /*
@@ -27,3 +28,4 @@ Route::apiResource('insurance', InsuranceController::class);
 Route::apiResource('purchase', PurchaseController::class);
 Route::apiResource('GetImportedItemInformation', GetImportedItemInformationController::class);
 Route::apiResource('GetPurchaseList', GetPurchaseListController::class);
+Route::apiResource('MapImportedItem', MapImportedItemController::class);

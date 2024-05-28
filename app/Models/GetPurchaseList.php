@@ -50,9 +50,6 @@ class GetPurchaseList extends Model
         'salesDt' => 'date',
         'stockRlsDt' => 'datetime',
     ];
-
-
-    // Define the relationship with GetPurchaseListsItem
     // Define the relationship with GetPurchaseListsItem using 'purchase_list_id'
     public function items()
     {
