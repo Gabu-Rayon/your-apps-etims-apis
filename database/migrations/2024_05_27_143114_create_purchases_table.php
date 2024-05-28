@@ -9,19 +9,19 @@ class CreatePurchasesTable extends Migration
     {
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
-            $table->string('supplier_tin');
-            $table->string('supplier_bhf_id');
-            $table->string('supplier_name');
-            $table->string('supplier_invc_no');
-            $table->string('type_code');
-            $table->string('status_code');
-            $table->string('pmt_type_code');
-            $table->timestamp('purch_date');
-            $table->timestamp('occurred_date');
-            $table->timestamp('confirm_date')->nullable();
-            $table->timestamp('warehouse_date')->nullable();
-            $table->string('remark')->nullable();
-            $table->string('mapping')->nullable();
+            $table->string('supplierTin');
+            $table->string('supplierBhfId');
+            $table->string('supplierName');
+            $table->string('supplierInvcNo');
+            $table->string('purchTypeCode');
+            $table->string('purchStatusCode');
+            $table->string('pmtTypeCode');
+            $table->date('purchDate');
+            $table->date('occurredDate');
+            $table->date('confirmDate');
+            $table->date('warehouseDate');
+            $table->text('remark');
+            $table->text('mapping');
             $table->timestamps();
         });
     }

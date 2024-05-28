@@ -9,18 +9,20 @@ class CreatePurchaseItemsTable extends Migration
     {
         Schema::create('purchase_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('purchase_id')->constrained()->onDelete('cascade');
-            $table->string('item_code');
-            $table->string('supplr_item_cls_code');
-            $table->string('supplr_item_code');
-            $table->string('supplr_item_name');
-            $table->integer('quantity');
-            $table->decimal('unit_price', 10, 2);
-            $table->integer('pkg_quantity');
-            $table->decimal('discount_rate', 10, 2);
-            $table->decimal('discount_amt', 10, 2);
-            $table->timestamp('item_expr_dt');
+            $table->unsignedBigInteger('purchase_id');
+            $table->string('itemCode');
+            $table->string('supplrItemClsCode');
+            $table->string('supplrItemCode');
+            $table->string('supplrItemname');
+            $table->decimal('quantity', 10, 2);
+            $table->decimal('unitPrice', 10, 2);
+            $table->decimal('pkgQuantity', 10, 2);
+            $table->decimal('discountRate', 10, 2);
+            $table->decimal('discountAmt', 10, 2);
+            $table->date('itemExprDt');
             $table->timestamps();
+
+            $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
         });
     }
 

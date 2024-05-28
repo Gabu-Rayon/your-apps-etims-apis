@@ -25,4 +25,8 @@ class Purchase extends Model
         'mapping',
     ];
 
+    public function purchaseItems()
+    {
+        return $this->hasMany(PurchaseItem::class, 'purchase_id');
+    }
 }
