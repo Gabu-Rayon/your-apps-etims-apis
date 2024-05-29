@@ -10,13 +10,48 @@ class MappedPurchase extends Model
     use HasFactory;
 
     protected $fillable = [
+        'invcNo',
+        'orgInvcNo',
+        'supplrTin',
+        'supplrBhfId',
+        'supplrName',
         'supplierInvcNo',
         'purchaseTypeCode',
-        'purchaseStatusCode'
+        'rceiptTyCd',
+        'paymentTypeCode',
+        'purchaseSttsCd',
+        'confirmDate',
+        'purchaseDate',
+        'warehouseDt',
+        'cnclReqDt',
+        'cnclDt',
+        'refundDate',
+        'totItemCnt',
+        'taxblAmtA',
+        'taxblAmtB',
+        'taxblAmtC',
+        'taxblAmtD',
+        'taxRtA',
+        'taxRtB',
+        'taxRtC',
+        'taxRtD',
+        'taxAmtA',
+        'taxAmtB',
+        'taxAmtC',
+        'taxAmtD',
+        'totTaxblAmt',
+        'totTaxAmt',
+        'totAmt',
+        'remark',
+        'resultDt',
+        'createdDate',
+        'isUpload',
+        'isStockIOUpdate',
+        'isClientStockUpdate'
     ];
 
-    public function itemPurchases()
+    public function items()
     {
-        return $this->hasMany(MappedPurchaseItemList::class, 'mapped_purchase_id');
+        return $this->hasMany(MappedPurchaseItemList::class);
     }
 }

@@ -11,11 +11,12 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('mapped_purchases', function (Blueprint $table) {
+        Schema::create('mapping_purchases_items_list', function (Blueprint $table) {
             $table->id();
-            $table->string('supplierInvcNo');
-            $table->string('purchaseTypeCode');
-            $table->string('purchaseStatusCode');
+            $table->foreignId('mapping_purchase_id')->constrained('mapping_purchases')->onDelete('cascade');
+            $table->string('supplierItemCode');
+            $table->string('itemCode');
+            $table->integer('mapQuantity');
             $table->timestamps();
         });
     }
@@ -25,6 +26,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('mapped_purchases');
+        Schema::dropIfExists('mapping_purchases_items_list');
     }
 };

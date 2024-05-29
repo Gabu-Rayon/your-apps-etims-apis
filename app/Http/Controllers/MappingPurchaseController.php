@@ -1,15 +1,16 @@
 <?php
 namespace App\Http\Controllers;
-use App\Models\MappedPurchase;
-use App\Models\MappedPurchaseItemList;
+use Exception;
+use Carbon\Carbon;
 use
 
 Illuminate\Http\Request;
-use Illuminate\Support\Facades\Validator;
+use App\Models\MappingPurchase;
 use Illuminate\Support\Facades\Log;
-use
-Carbon\Carbon;
-class MappedPurchaseController extends Controller
+use App\Models\MappingPurchaseItemList;
+use Illuminate\Support\Facades\Validator;
+
+class MappingPurchaseController extends Controller
 {
     public function store(Request $request)
     {
@@ -36,14 +37,14 @@ class MappedPurchaseController extends Controller
             Log::info('Request data');
             Log::info($data);
 
-            $mappedPurchase = MappedPurchase::create([
+            $mappedPurchase = MappingPurchase::create([
                 'supplierInvcNo' => $data['supplierInvcNo'],
                 'purchaseTypeCode' => $data['purchaseTypeCode'],
                 'purchaseStatusCode' => $data['purchaseStatusCode']
             ]);
 
             foreach ($data['itemPurchases'] as $item) {
-                $mappedPurchaseItem = new MappedPurchaseItemList([
+                $mappedPurchaseItem = new MappingPurchaseItemList([
                     'mapped_purchase_id' => $mappedPurchase->id,
                     'supplierItemCode' => $item['supplierItemCode'],
                     'itemCode' => $item['itemCode'],
@@ -52,7 +53,7 @@ class MappedPurchaseController extends Controller
                 $mappedPurchaseItem->save();
             }
 
-            $mappedPurchase = MappedPurchase::with('itemPurchases')->find($mappedPurchase->id);
+            $mappedPurchase = MappingPurchase::with('itemPurchases')->find($mappedPurchase->id);
 
             Log::info('New Purchase Mapped successfully');
             Log::info($mappedPurchase);
