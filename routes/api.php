@@ -7,6 +7,7 @@ use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\MappedPurchaseController;
 use App\Http\Controllers\GetPurchaseListController;
 use App\Http\Controllers\MapImportedItemController;
+use App\Http\Controllers\UpdateMapPurchaseStatusController;
 use App\Http\Controllers\GetImportedItemInformationController;
 
 /*
@@ -31,3 +32,4 @@ Route::apiResource('GetImportedItemInformation', GetImportedItemInformationContr
 Route::apiResource('GetPurchaseList', GetPurchaseListController::class);
 Route::apiResource('MapImportedItem', MapImportedItemController::class);
 Route::apiResource('MapPurchase', MappedPurchaseController::class);
+Route::apiResource('UpdateMapPurchaseStatus', UpdateMapPurchaseStatusController::class);
