@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\CompositionItemController;
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\InitializationController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\ItemClassificationController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\NoticeController;
+use App\Models\Customer;
 
 /*
 |--------------------------------------------------------------------------
@@ -32,6 +34,7 @@ Route::apiResource('GetNoticeList', NoticeController::class)->only(['index']);
 Route::apiResource('GetBranchList', BranchController::class)->only(['index']);
 Route::apiResource('AddBranchUser', BranchUserController::class)->only(['index', 'store']);
 Route::apiResource('CompositionItemList', CompositionItemController::class)->only(['index', 'store']);
+Route::apiResource('Customer', CustomerController::class)->only(['index', 'store']);
 Route::apiResource('ItemsList', ItemController::class)->only(['index', 'store', 'update']);
 Route::apiResource('Initialization', InitializationController::class)->only(['index', 'store']);
 Route::apiResource('GetItemClassificationList', ItemClassificationController::class)->only(['index']);
