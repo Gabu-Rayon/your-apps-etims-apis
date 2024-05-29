@@ -2,8 +2,11 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\InsuranceController;
+use App\Http\Controllers\GetImportedItemInformationController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -18,7 +21,14 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::apiResource('GetCodeList', CodeController::class);
+Route::middleware('auth:api')->get('/user', function (Request $request) {
+    return $request->user();
+});
 
+
+Route::apiResource('insurance', InsuranceController::class);
+Route::apiResource('purchase', PurchaseController::class);
+Route::apiResource('GetImportedItemInformation', GetImportedItemInformationController::class);
+Route::apiResource('GetCodeList', CodeController::class);
 Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
 // Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance'])->middleware('apikey');
