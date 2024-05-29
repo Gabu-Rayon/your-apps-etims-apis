@@ -9,9 +9,6 @@ use Illuminate\Support\Facades\Validator;
 
 class InitializationController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index() {
         try {
             $initializations = Initialization::all();
@@ -80,6 +77,63 @@ class InitializationController extends Controller
             Log::error($e);
             return response()->json([
                 'message' => 'Failed to create initialization',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function update (Request $request, Initialization $initialization) {
+        try {
+            $data = $request->all();
+            $now = date('YmdHis');
+            $initialization->tin = $request->tin;
+            $initialization->bhfId = $request->bhfId;
+            $initialization->dvcSrlNo = $request->dvcSrlNo;
+            $initialization->save();
+            Log::info('Initialization updated successfully');
+            Log::info($initialization);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'init' => $initialization
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to update initialization');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to update initialization',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function destroy(Initialization $initialization) {
+        try {
+            $initialization->delete();
+            $now = date('YmdHis');
+            Log::info('Initialization deleted successfully');
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'init' => $initialization
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to delete initialization');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to delete initialization',
                 'error' => $e->getMessage()
             ], 500);
         }
