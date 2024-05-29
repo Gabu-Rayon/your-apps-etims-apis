@@ -53,8 +53,13 @@ Route::apiResource('Initialization', InitializationController::class)->only([
     'update',
     'destroy'
 ]);
+Route::apiResource('AddBranchUser', BranchUserController::class)->only([
+    'index',
+    'store',
+    'update',
+    'destroy'
+]);
 Route::apiResource('GetBranchList', BranchController::class)->only(['index']);
-Route::apiResource('AddBranchUser', BranchUserController::class)->only(['index', 'store']);
 Route::apiResource('CompositionItemList', CompositionItemController::class)->only(['index', 'store']);
 Route::apiResource('Customer', CustomerController::class)->only(['index', 'store']);
 Route::apiResource('ItemOpeningStock', ItemOpeningStockController::class)->only(['index', 'store']);

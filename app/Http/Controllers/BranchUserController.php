@@ -93,4 +93,75 @@ class BranchUserController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
+    public function update(Request $request, BranchUser $branchUser) {
+        try {
+            $data = $request->all();
+            $now = date('YmdHis');
+        
+            $branchUser->branchUserId = $data['branchUserId'];
+            $branchUser->branchUserName = $data['branchUserName'];
+            $branchUser->password = $data['password'];
+            $branchUser->save();
+        
+            Log::info('Branch User updated successfully');
+            Log::info($branchUser);
+        
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'bhfUsr' => $branchUser
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to update Branch User');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to update Branch User',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+
+    public function destroy(BranchUser $branchUser) {
+        try {
+            $branchUser->delete();
+            $now = date('YmdHis');
+        
+            Log::info('Branch User deleted successfully');
+            Log::info($branchUser);
+        
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'bhfUsr' => $branchUser
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to delete Branch User');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to delete Branch User',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
