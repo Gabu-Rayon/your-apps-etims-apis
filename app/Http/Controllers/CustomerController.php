@@ -2,24 +2,22 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Code;
+use App\Models\Customer;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
-class CodeController extends Controller
+class CustomerController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index() {
         try {
-            $codes = Code::all();
+            $customers = Customer::all();
             $now = date('YmdHis');
-            foreach ($codes as $code) {
-                $code['dtlList'] = $code->details()->get();
-            }
-            Log::info('Codes retrieved successfully');
-            Log::info($codes);
+            Log::info('Customers retrieved successfully');
+            Log::info($customers);
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -27,15 +25,15 @@ class CodeController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'clsList' => $codes
+                        'custmrLst' => $customers
                     ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to get codes');
+            Log::error('Failed to get Customers');
             Log::error($e);
             return response()->json([
-                'message' => 'Failed to get codes',
+                'message' => 'Failed to get Customers',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -44,25 +42,34 @@ class CodeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request) {
+    public function store(Request $request)
+    {
         try {
 
             $data = $request->all();
+
+            Log::info('Customer data');
+            Log::info($data);
+
+            $validator = Validator::make($data, [
+                'customerNo' => 'required|unique:customers',
+                'customerTin' => 'required|unique:customers',
+                'customerName' => 'required'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation Error',
+                    'error' => $validator->errors()
+                ], 400);
+            }
+
             $now = date('YmdHis');
 
-            $code = new Code();
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
+            $customer = Customer::create($data);
 
-            $code->save();
-
-            Log::info('Code created successfully');
-            Log::info($code);
+            Log::info('Customer created successfully');
+            Log::info($customer);
 
             return response()->json([
                 'message' => 'success',
@@ -70,14 +77,17 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'custmr' => $customer
+                    ]
                 ]
             ]);
+
         } catch (\Exception $e) {
-            Log::error('Failed to create code');
+            Log::error('Failed to create Customer');
             Log::error($e);
             return response()->json([
-                'message' => 'Failed to create code',
+                'message' => 'Failed to create Customer',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -86,23 +96,16 @@ class CodeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Code $code) {
+
+    public function update(Request $request, Customer $customer) {
         try {
             $data = $request->all();
             $now = date('YmdHis');
 
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code updated successfully');
-            Log::info($code);
+            $customer->customerNo = $data['customerNo'];
+            $customer->customerTin = $data['customerTin'];
+            $customer->customerName = $data['customerName'];
+            $customer->save();
 
             return response()->json([
                 'message' => 'success',
@@ -110,14 +113,14 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'custmr' => $customer
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to update code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to update code',
+                'message' => 'An error occurred while updating customer',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -126,29 +129,25 @@ class CodeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Code $code) {
+
+    public function destroy(Customer $customer) {
         try {
-            $code->delete();
-
+            $customer->delete();
             $now = date('YmdHis');
-
-            Log::info('Code deleted successfully');
-
             return response()->json([
                 'message' => 'success',
                 'data' => [
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "data" => null
+                    "data" => [
+                        'custmr' => $customer
+                    ]
                 ]
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Failed to delete code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to delete code',
+                'message' => 'An error occurred while deleting customer',
                 'error' => $e->getMessage()
             ], 500);
         }

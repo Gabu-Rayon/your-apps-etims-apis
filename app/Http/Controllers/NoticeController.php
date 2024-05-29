@@ -2,24 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Code;
+use App\Models\Notice;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
-class CodeController extends Controller
+class NoticeController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index()
+    {
         try {
-            $codes = Code::all();
+            $notices = Notice::all();
             $now = date('YmdHis');
-            foreach ($codes as $code) {
-                $code['dtlList'] = $code->details()->get();
-            }
-            Log::info('Codes retrieved successfully');
-            Log::info($codes);
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -27,15 +22,13 @@ class CodeController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'clsList' => $codes
+                        'noticeList' => $notices
                     ]
                 ]
-            ]);
+            ], 200);
         } catch (\Exception $e) {
-            Log::error('Failed to get codes');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to get codes',
+                'message' => 'An error occurred while retrieving item classification list',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -46,23 +39,17 @@ class CodeController extends Controller
      */
     public function store(Request $request) {
         try {
-
             $data = $request->all();
             $now = date('YmdHis');
 
-            $code = new Code();
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code created successfully');
-            Log::info($code);
+            $notice = new Notice();
+            $notice->noticeNo = $data['noticeNo'];
+            $notice->title = $data['title'];
+            $notice->cont = $data['cont'];
+            $notice->dtlUrl = $data['dtlUrl'];
+            $notice->regrNm = $data['regrNm'];
+            $notice->regDt = $now;
+            $notice->save();
 
             return response()->json([
                 'message' => 'success',
@@ -70,14 +57,14 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'notice' => $notice
+                    ]
                 ]
-            ]);
+            ], 200);
         } catch (\Exception $e) {
-            Log::error('Failed to create code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to create code',
+                'message' => 'An error occurred while creating a notice',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -86,23 +73,18 @@ class CodeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Code $code) {
+    public function update(Request $request, Notice $notice) {
         try {
             $data = $request->all();
             $now = date('YmdHis');
 
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code updated successfully');
-            Log::info($code);
+            $notice->noticeNo = $data['noticeNo'];
+            $notice->title = $data['title'];
+            $notice->cont = $data['cont'];
+            $notice->dtlUrl = $data['dtlUrl'];
+            $notice->regrNm = $data['regrNm'];
+            $notice->regDt = $now;
+            $notice->save();
 
             return response()->json([
                 'message' => 'success',
@@ -110,14 +92,14 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'notice' => $notice
+                    ]
                 ]
-            ]);
+            ], 200);
         } catch (\Exception $e) {
-            Log::error('Failed to update code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to update code',
+                'message' => 'An error occurred while updating a notice',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -126,13 +108,10 @@ class CodeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Code $code) {
+    public function destroy(Notice $notice) {
         try {
-            $code->delete();
-
+            $notice->delete();
             $now = date('YmdHis');
-
-            Log::info('Code deleted successfully');
 
             return response()->json([
                 'message' => 'success',
@@ -142,13 +121,10 @@ class CodeController extends Controller
                     "resultDt" => $now,
                     "data" => null
                 ]
-            ]);
-
+            ], 200);
         } catch (\Exception $e) {
-            Log::error('Failed to delete code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to delete code',
+                'message' => 'An error occurred while deleting a notice',
                 'error' => $e->getMessage()
             ], 500);
         }

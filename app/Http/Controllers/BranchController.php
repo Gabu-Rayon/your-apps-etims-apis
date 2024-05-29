@@ -2,24 +2,21 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Code;
-use Illuminate\Http\Request;
+use App\Models\Branch;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Request;
 
-class CodeController extends Controller
+class BranchController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index() {
         try {
-            $codes = Code::all();
+            $branches = Branch::all();
             $now = date('YmdHis');
-            foreach ($codes as $code) {
-                $code['dtlList'] = $code->details()->get();
-            }
-            Log::info('Codes retrieved successfully');
-            Log::info($codes);
+            Log::info('Branches retrieved successfully');
+            Log::info($branches);
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -27,15 +24,15 @@ class CodeController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'clsList' => $codes
+                        'bhfList' => $branches
                     ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to get codes');
+            Log::error('Failed to get branches');
             Log::error($e);
             return response()->json([
-                'message' => 'Failed to get codes',
+                'message' => 'Failed to get branches',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -44,25 +41,19 @@ class CodeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+
     public function store(Request $request) {
         try {
-
             $data = $request->all();
             $now = date('YmdHis');
 
-            $code = new Code();
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code created successfully');
-            Log::info($code);
+            $branch = new Branch();
+            $branch->branchNo = $data['branchNo'];
+            $branch->branchName = $data['branchName'];
+            $branch->branchTel = $data['branchTel'];
+            $branch->branchAddr = $data['branchAddr'];
+            $branch->branchManager = $data['branchManager'];
+            $branch->save();
 
             return response()->json([
                 'message' => 'success',
@@ -70,14 +61,16 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'branch' => $branch
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to create code');
+            Log::error('Failed to create branch');
             Log::error($e);
             return response()->json([
-                'message' => 'Failed to create code',
+                'message' => 'Failed to create branch',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -86,23 +79,18 @@ class CodeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Code $code) {
+
+    public function update(Request $request, Branch $branch) {
         try {
             $data = $request->all();
             $now = date('YmdHis');
 
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code updated successfully');
-            Log::info($code);
+            $branch->branchNo = $data['branchNo'];
+            $branch->branchName = $data['branchName'];
+            $branch->branchTel = $data['branchTel'];
+            $branch->branchAddr = $data['branchAddr'];
+            $branch->branchManager = $data['branchManager'];
+            $branch->save();
 
             return response()->json([
                 'message' => 'success',
@@ -110,14 +98,16 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'branch' => $branch
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to update code');
+            Log::error('Failed to update branch');
             Log::error($e);
             return response()->json([
-                'message' => 'Failed to update code',
+                'message' => 'Failed to update branch',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -126,29 +116,29 @@ class CodeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Code $code) {
+
+    public function destroy(Branch $branch) {
         try {
-            $code->delete();
-
+            $branch->delete();
             $now = date('YmdHis');
-
-            Log::info('Code deleted successfully');
-
+            Log::info('Branch deleted successfully');
+            Log::info($branch);
             return response()->json([
                 'message' => 'success',
                 'data' => [
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "data" => null
+                    "data" => [
+                        'branch' => $branch
+                    ]
                 ]
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Failed to delete code');
+            Log::error('Failed to delete branch');
             Log::error($e);
             return response()->json([
-                'message' => 'Failed to delete code',
+                'message' => 'Failed to delete branch',
                 'error' => $e->getMessage()
             ], 500);
         }
