@@ -8,9 +8,8 @@ use Illuminate\Database\Eloquent\Model;
 class ApiKey extends Model
 {
     use HasFactory;
-
+  
     protected $table = 'api_keys';
-
     /**
      * The attributes that are mass assignable.
      *
@@ -19,7 +18,7 @@ class ApiKey extends Model
     protected $fillable = [
         'key',
         'isUsed',
-        'activated',      
+        'activated',
     ];
 
     /**
