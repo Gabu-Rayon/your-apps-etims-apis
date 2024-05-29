@@ -34,14 +34,6 @@ class ItemOpeningStockController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
@@ -77,34 +69,59 @@ class ItemOpeningStockController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(ItemOpeningStock $itemOpeningStock)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ItemOpeningStock $itemOpeningStock)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ItemOpeningStock $itemOpeningStock)
-    {
-        //
+    public function update(Request $request, ItemOpeningStock $itemOpeningStock) {
+        try {
+            $data = $request->all();
+            $now = date('YmdHis');
+
+            $itemOpeningStock->itemCode = $data['itemCode'];
+            $itemOpeningStock->openingStock = $data['openingStock'];
+            $itemOpeningStock->save();
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'itemOpeningStock' => $itemOpeningStock
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to update Item Opening Stock',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ItemOpeningStock $itemOpeningStock)
-    {
-        //
+    public function destroy(ItemOpeningStock $itemOpeningStock) {
+        try {
+            $itemOpeningStock->delete();
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'itemOpeningStock' => $itemOpeningStock
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to delete Item Opening Stock',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

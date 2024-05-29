@@ -83,5 +83,10 @@ Route::apiResource('GetBranchList', BranchController::class)->only([
     'update',
     'destroy'
 ]);
-Route::apiResource('ItemOpeningStock', ItemOpeningStockController::class)->only(['index', 'store']);
+Route::apiResource('ItemOpeningStock', ItemOpeningStockController::class)->only([
+    'index',
+    'store',
+    'update',
+    'destroy'
+]);
 Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
