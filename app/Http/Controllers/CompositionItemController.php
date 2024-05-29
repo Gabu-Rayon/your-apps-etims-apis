@@ -83,4 +83,73 @@ class CompositionItemController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
+    public function update(Request $request, CompositionItem $compositionItem) {
+        try {
+            $data = $request->all();
+            $now = date('YmdHis');
+        
+            $compositionItem->mainItemCode = $data['mainItemCode'];
+            $compositionItem->compoItemCode = $data['compoItemCode'];
+            $compositionItem->compoItemQty = $data['compoItemQty'];
+            $compositionItem->save();
+        
+            Log::info('Composition Item updated successfully');
+            Log::info($compositionItem);
+        
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'compositionItem' => $compositionItem
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to update Composition Item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to update Composition Item',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+
+    public function destroy(CompositionItem $compositionItem) {
+        try {
+            $now = date('YmdHis');
+            $compositionItem->delete();
+            Log::info('Composition Item deleted successfully');
+            Log::info($compositionItem);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'compositionItem' => $compositionItem
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to delete Composition Item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to delete Composition Item',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
