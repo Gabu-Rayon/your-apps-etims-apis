@@ -94,16 +94,85 @@ class ItemController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Item $item)
-    {
-        //
+    public function update(Request $request, Item $item) {
+        try {
+            $data = $request->all();
+
+            $validator = Validator::make($request->all(), [
+                "itemCode" => "required|string|min:1",
+                "itemClassifiCode" => "required|string|min:1",
+                "itemTypeCode" => "required|string|in:1,2,3",
+                "itemName" => "required|string|min:1",
+                "countryCode" => "required|string|min:1",
+                "pkgUnitCode" => "required|string|min:1",
+                "qtyUnitCode" => "required|string|min:1",
+                "taxTypeCode" => "required|string|min:1",
+                "unitPrice" => "required|numeric|min:1",
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => $validator->errors()->all()
+                ], 400);
+            }
+
+            $item->update($data);
+
+            $now = date('YmdHis');
+
+            Log::info('Item updated successfully');
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'item' => $item
+                    ]
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Failed to update item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to update item',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Item $item)
-    {
-        //
+    public function destroy(Item $item) {
+        try {
+            $item->delete();
+
+            $now = date('YmdHis');
+
+            Log::info('Item deleted successfully');
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => null
+                ]
+            ]);
+
+        } catch (Exception $e) {
+            Log::error('Failed to delete item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to delete item',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
