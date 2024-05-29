@@ -39,4 +39,9 @@ class Item extends Model
     {
         return $this->hasMany(CompositionItem::class, 'mainItemCode', 'itemCode');
     }
+
+    public function item_opening_stocks()
+    {
+        return $this->hasMany(ItemOpeningStock::class, 'itemCode', 'itemCode');
+    }
 }

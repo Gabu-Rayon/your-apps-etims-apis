@@ -11,8 +11,8 @@ use App\Http\Controllers\InitializationController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\ItemClassificationController;
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemOpeningStockController;
 use App\Http\Controllers\NoticeController;
-use App\Models\Customer;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +35,7 @@ Route::apiResource('GetBranchList', BranchController::class)->only(['index']);
 Route::apiResource('AddBranchUser', BranchUserController::class)->only(['index', 'store']);
 Route::apiResource('CompositionItemList', CompositionItemController::class)->only(['index', 'store']);
 Route::apiResource('Customer', CustomerController::class)->only(['index', 'store']);
+Route::apiResource('ItemOpeningStock', ItemOpeningStockController::class)->only(['index', 'store']);
 Route::apiResource('ItemsList', ItemController::class)->only(['index', 'store', 'update']);
 Route::apiResource('Initialization', InitializationController::class)->only(['index', 'store']);
 Route::apiResource('GetItemClassificationList', ItemClassificationController::class)->only(['index']);
