@@ -10,6 +10,7 @@ class Branch extends Model
     use HasFactory;
 
     protected $fillable = [
+        "tin",
         "bhfId",
         "bhfNm",
         "bhfSttsCd",
@@ -25,5 +26,9 @@ class Branch extends Model
 
     public function initialization () {
         return $this->hasOne(Initialization::class, "bhfId", "bhfId");
+    }
+
+    public function customers () {
+        return $this->hasMany(Customer::class, "bhfId", "bhfId");
     }
 }

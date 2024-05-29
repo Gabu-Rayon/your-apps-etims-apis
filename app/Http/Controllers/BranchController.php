@@ -48,11 +48,18 @@ class BranchController extends Controller
             $now = date('YmdHis');
 
             $branch = new Branch();
-            $branch->branchNo = $data['branchNo'];
-            $branch->branchName = $data['branchName'];
-            $branch->branchTel = $data['branchTel'];
-            $branch->branchAddr = $data['branchAddr'];
-            $branch->branchManager = $data['branchManager'];
+            $branch->tin = $data['tin'];
+            $branch->bhfId = $data['bhfId'];
+            $branch->bhfNm = $data['bhfNm'];
+            $branch->bhfSttsCd = $data['bhfSttsCd'];
+            $branch->prvncNm = $data['prvncNm'];
+            $branch->dstrtNm = $data['dstrtNm'];
+            $branch->sctrNm = $data['sctrNm'];
+            $branch->locDesc = $data['locDesc'];
+            $branch->mgrNm = $data['mgrNm'];
+            $branch->mgrTelNo = $data['mgrTelNo'];
+            $branch->mgrEmail = $data['mgrEmail'];
+            $branch->hqYn = $data['hqYn'];
             $branch->save();
 
             return response()->json([

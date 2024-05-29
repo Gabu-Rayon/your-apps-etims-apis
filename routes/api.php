@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\CodeController;
-use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\GetPurchaseListController;
 use App\Http\Controllers\MapImportedItemController;
 use App\Http\Controllers\GetImportedItemInformationController;
@@ -18,6 +17,7 @@ use App\Http\Controllers\ItemClassificationController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemOpeningStockController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\StockMoveListController;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,6 +100,12 @@ Route::apiResource('GetBranchList', BranchController::class)->only([
     'destroy'
 ]);
 Route::apiResource('ItemOpeningStock', ItemOpeningStockController::class)->only([
+    'index',
+    'store',
+    'update',
+    'destroy'
+]);
+Route::apiResource('StockMoveList', StockMoveListController::class)->only([
     'index',
     'store',
     'update',

@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('customerNo')->unique();
             $table->string('customerTin')->unique();
             $table->string('customerName');
+            $table->string('bhfId');
             $table->string('address');
             $table->string('telNo');
             $table->string('email');
@@ -24,6 +25,9 @@ return new class extends Migration
             $table->string('remark');
 
             $table->index('customerNo');
+            $table->index('customerTin');
+
+            $table->foreign('bhfId')->references('bhfId')->on('branches');
             $table->timestamps();
         });
     }
