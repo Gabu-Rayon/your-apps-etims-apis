@@ -29,8 +29,18 @@ use App\Http\Controllers\NoticeController;
     return $request->user();
 });
 
-Route::apiResource('GetCodeList', CodeController::class)->only(['index']);
-Route::apiResource('GetNoticeList', NoticeController::class)->only(['index']);
+Route::apiResource('GetCodeList', CodeController::class)->only([
+    'index',
+    'store',
+    'update',
+    'destroy'
+]);
+Route::apiResource('GetNoticeList', NoticeController::class)->only([
+    'index',
+    'store',
+    'update',
+    'destroy'
+]);
 Route::apiResource('GetBranchList', BranchController::class)->only(['index']);
 Route::apiResource('AddBranchUser', BranchUserController::class)->only(['index', 'store']);
 Route::apiResource('CompositionItemList', CompositionItemController::class)->only(['index', 'store']);
