@@ -35,50 +35,102 @@ class ItemClassificationController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
-    {
-        //
-    }
+    public function store(Request $request) {
+        try {
+            $data = $request->all();
+            $now = date('YmdHis');
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(ItemClassification $itemClassification)
-    {
-        //
-    }
+            $itemClassification = new ItemClassification();
+            $itemClassification->itemCls = $data['itemCls'];
+            $itemClassification->itemClsNm = $data['itemClsNm'];
+            $itemClassification->itemClsDesc = $data['itemClsDesc'];
+            $itemClassification->useYn = $data['useYn'];
+            $itemClassification->userDfnNm1 = $data['userDfnNm1'];
+            $itemClassification->userDfnNm2 = $data['userDfnNm2'];
+            $itemClassification->userDfnNm3 = $data['userDfnNm3'];
+            $itemClassification->save();
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(ItemClassification $itemClassification)
-    {
-        //
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'itemCls' => $itemClassification
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while storing item classification',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, ItemClassification $itemClassification)
-    {
-        //
+    public function update(Request $request, ItemClassification $itemClassification) {
+        try {
+            $data = $request->all();
+            $now = date('YmdHis');
+
+            $itemClassification->itemCls = $data['itemCls'];
+            $itemClassification->itemClsNm = $data['itemClsNm'];
+            $itemClassification->itemClsDesc = $data['itemClsDesc'];
+            $itemClassification->useYn = $data['useYn'];
+            $itemClassification->userDfnNm1 = $data['userDfnNm1'];
+            $itemClassification->userDfnNm2 = $data['userDfnNm2'];
+            $itemClassification->userDfnNm3 = $data['userDfnNm3'];
+            $itemClassification->save();
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'itemCls' => $itemClassification
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while updating item classification',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(ItemClassification $itemClassification)
-    {
-        //
+    public function destroy(ItemClassification $itemClassification) {
+        try {
+            $itemClassification->delete();
+
+            $now = date('YmdHis');
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => null
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while deleting item classification',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }
