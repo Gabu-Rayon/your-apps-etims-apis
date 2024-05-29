@@ -34,4 +34,9 @@ class Item extends Model
         "quantity",
         "packageQuantity"
     ];
+
+    public function composition_items()
+    {
+        return $this->hasMany(CompositionItem::class, 'mainItemCode', 'itemCode');
+    }
 }
