@@ -61,24 +61,6 @@ class ItemController extends Controller
             $createdItems = [];
         
             foreach ($data['items'] as $item) {
-                $validator = Validator::make($request->all(), [
-                    'itemCode' => 'required|string|min:1',
-                    'itemClassifiCode' => 'required|min:1|string',
-                    'itemTypeCode' => 'required|min:1|string|in:1,2,3',
-                    'itemName' => 'required|min:1|string',
-                    'countryCode' => 'required|min:1|string',
-                    'pkgUnitCode' => 'required|min:1|string',
-                    'qtyUnitCode' => 'required|min:1|string',
-                    'taxTypeCode' => 'required|min:1|string',
-                    'unitPrice' => 'required|numeric',
-                ]);
-                if ($validator->fails()) {
-                    return response()->json([
-                        'message' => 'Validation failed',
-                        'error' => $validator->errors()->all()
-                    ], 400);
-                }
-
                 $item = Item::create($item);
 
                 array_push($createdItems, $item);
