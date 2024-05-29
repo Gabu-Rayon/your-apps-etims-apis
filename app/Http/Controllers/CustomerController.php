@@ -92,4 +92,64 @@ class CustomerController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
+    public function update(Request $request, Customer $customer) {
+        try {
+            $data = $request->all();
+            $now = date('YmdHis');
+
+            $customer->customerNo = $data['customerNo'];
+            $customer->customerTin = $data['customerTin'];
+            $customer->customerName = $data['customerName'];
+            $customer->save();
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'custmr' => $customer
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while updating customer',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+
+    public function destroy(Customer $customer) {
+        try {
+            $customer->delete();
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'custmr' => $customer
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while deleting customer',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }

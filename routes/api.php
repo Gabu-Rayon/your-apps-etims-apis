@@ -65,8 +65,13 @@ Route::apiResource('CompositionItemList', CompositionItemController::class)->onl
     'update',
     'destroy'
 ]);
+Route::apiResource('Customer', CustomerController::class)->only([
+    'index',
+    'store',
+    'update',
+    'destroy'
+]);
 Route::apiResource('GetBranchList', BranchController::class)->only(['index']);
-Route::apiResource('Customer', CustomerController::class)->only(['index', 'store']);
 Route::apiResource('ItemOpeningStock', ItemOpeningStockController::class)->only(['index', 'store']);
 Route::apiResource('ItemsList', ItemController::class)->only(['index', 'store', 'update']);
 Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
