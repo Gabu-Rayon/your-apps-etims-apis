@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AddSaleController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\GetPurchaseListController;
@@ -37,3 +38,4 @@ Route::apiResource('MapPurchase', MappingPurchaseController::class);
 Route::apiResource('UpdateMapPurchaseStatus', UpdateMapPurchaseStatusController::class);
 Route::apiResource('SearchByDate', MapPurchaseSearchByDateController::class);
 Route::apiResource('AddDirectCreditNote', AddDirectCreditNoteController::class);
+Route::apiResource('AddSale', AddSaleController::class);
