@@ -251,7 +251,6 @@ class AddSaleCreditNoteController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'id' => $addSaleCreditNote->id,
                         'orgInvoiceNo' => $addSaleCreditNote->orgInvoiceNo,
                         'customerTin' => $addSaleCreditNote->customerTin,
                         'customerName' => $addSaleCreditNote->customerName,
@@ -272,8 +271,6 @@ class AddSaleCreditNoteController extends Controller
 
                          'creditNoteItemsList' => $addSaleCreditNote->creditNoteItemsList->map(function ($item) {
                             return [
-                                'id' => $item->id,
-                                'add_sale_credit_note_id' => $item->add_sale_credit_note_id,
                                 'itemCode' => $item->itemCode,
                                 'itemClassCode' => $item->itemClassCode,
                                 'itemTypeCode' => $item->itemTypeCode,
