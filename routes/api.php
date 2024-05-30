@@ -8,6 +8,7 @@ use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\GetPurchaseListController;
 use App\Http\Controllers\MapImportedItemController;
 use App\Http\Controllers\MappingPurchaseController;
+use App\Http\Controllers\AddSaleCreditNoteController;
 use App\Http\Controllers\AddDirectCreditNoteController;
 use App\Http\Controllers\MapPurchaseSearchByDateController;
 use App\Http\Controllers\UpdateMapPurchaseStatusController;
@@ -39,3 +40,4 @@ Route::apiResource('UpdateMapPurchaseStatus', UpdateMapPurchaseStatusController:
 Route::apiResource('SearchByDate', MapPurchaseSearchByDateController::class);
 Route::apiResource('AddDirectCreditNote', AddDirectCreditNoteController::class);
 Route::apiResource('AddSale', AddSaleController::class);
+Route::apiResource('AddSaleCreditNote', AddSaleCreditNoteController::class);
