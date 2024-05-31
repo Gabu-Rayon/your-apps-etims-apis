@@ -4,7 +4,6 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BranchUserController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\PurchaseController;
-use App\Http\Controllers\CodeController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\GetPurchaseListController;
 use App\Http\Controllers\MapImportedItemController;
