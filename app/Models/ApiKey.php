@@ -9,8 +9,6 @@ class ApiKey extends Model
 {
     use HasFactory;
 
-    protected $table = 'api_keys';
-
     /**
      * The attributes that are mass assignable.
      *
