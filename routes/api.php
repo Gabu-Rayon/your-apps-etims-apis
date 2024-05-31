@@ -12,6 +12,7 @@ use App\Http\Controllers\AddSaleCreditNoteController;
 use App\Http\Controllers\AddDirectCreditNoteController;
 use App\Http\Controllers\MapPurchaseSearchByDateController;
 use App\Http\Controllers\UpdateMapPurchaseStatusController;
+use App\Http\Controllers\GetSalesByTraderInvoiceNoController;
 use App\Http\Controllers\GetImportedItemInformationController;
 
 /*
@@ -41,3 +42,5 @@ Route::apiResource('SearchByDate', MapPurchaseSearchByDateController::class);
 Route::apiResource('AddDirectCreditNote', AddDirectCreditNoteController::class);
 Route::apiResource('AddSale', AddSaleController::class);
 Route::apiResource('AddSaleCreditNote', AddSaleCreditNoteController::class);
+
+Route::apiResource('GetSalesByTraderInvoiceNo', GetSalesByTraderInvoiceNoController::class);

@@ -1,7 +1,9 @@
 <?php
 
+namespace Database\Seeders;
+
 use Illuminate\Database\Seeder;
-use App\Models\GetSalesByTraderInvoiceNo; 
+use Illuminate\Support\Facades\DB;
 
 class GetSalesByTraderInvoiceNoSeeder extends Seeder
 {
@@ -12,7 +14,8 @@ class GetSalesByTraderInvoiceNoSeeder extends Seeder
      */
     public function run()
     {
-        GetSalesByTraderInvoiceNo::create([
+        DB::table('get_sales_by_trader_invoice_no')->insert([
+            'id' => 2137,
             'trderInvoiceNo' => '10',
             'invoiceNo' => 1023,
             'orgInvoiceNo' => 0,
@@ -29,21 +32,21 @@ class GetSalesByTraderInvoiceNoSeeder extends Seeder
             'refundDate' => null,
             'refundReasonCd' => null,
             'totalItemCnt' => 1,
-            'taxableAmtA' => 0,
-            'taxableAmtB' => 0,
-            'taxableAmtC' => 0,
-            'taxableAmtD' => 0,
-            'taxRateA' => 0,
-            'taxRateB' => 0,
-            'taxRateC' => 0,
-            'taxRateD' => 0,
-            'taxAmtA' => 0,
-            'taxAmtB' => 0,
-            'taxAmtC' => 0,
-            'taxAmtD' => 0,
-            'totalTaxableAmt' => 10000,
-            'totalTaxAmt' => 0,
-            'totalAmt' => 10000,
+            'taxableAmtA' => 0.00000000,
+            'taxableAmtB' => 0.00000000,
+            'taxableAmtC' => 0.00000000,
+            'taxableAmtD' => 0.00000000,
+            'taxRateA' => 0.00000000,
+            'taxRateB' => 0.00000000,
+            'taxRateC' => 0.00000000,
+            'taxRateD' => 0.00000000,
+            'taxAmtA' => 0.00000000,
+            'taxAmtB' => 0.00000000,
+            'taxAmtC' => 0.00000000,
+            'taxAmtD' => 0.00000000,
+            'totalTaxableAmt' => 10000.00000000,
+            'totalTaxAmt' => 0.00000000,
+            'totalAmt' => 10000.00000000,
             'prchrAcptcYn' => 'Y',
             'remark' => '',
             'regrNm' => 'Admin',
@@ -59,9 +62,9 @@ class GetSalesByTraderInvoiceNoSeeder extends Seeder
             'receipt_TopMsg' => '',
             'receipt_BtmMsg' => '',
             'receipt_PrchrAcptcYn' => 'Y',
-            'createdDate' => '3/15/2024 10:49:06 AM',
+            'createdDate' => '2024-03-15 10:49:06',
             'isKRASynchronized' => true,
-            'kraSynchronizedDate' => '3/15/2024 10:49:06 AM',
+            'kraSynchronizedDate' => '2024-03-15 10:49:06',
             'isStockIOUpdate' => false,
             'resultCd' => '000',
             'resultMsg' => 'Successful',
@@ -73,7 +76,7 @@ class GetSalesByTraderInvoiceNoSeeder extends Seeder
             'response_SdcDateTime' => '20240315104908',
             'response_SdcId' => null,
             'response_MrcNo' => null,
-            'qrCodeURL' => null,
+            'qrCodeURL' => null
         ]);
     }
 }
