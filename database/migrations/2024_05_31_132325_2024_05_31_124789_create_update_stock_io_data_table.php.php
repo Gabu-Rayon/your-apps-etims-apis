@@ -9,24 +9,21 @@ return new class extends Migration
     /**
      * Run the migrations.
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('insurances', function (Blueprint $table) {
+        Schema::create('update_stock_io_data', function (Blueprint $table) {
             $table->id();
-            $table->string('insuranceCode');
-            $table->string('insuranceName');
-            $table->decimal('premiumRate', 8, 2);
-            $table->boolean('isUsed');
+            $table->string('storeReleaseTypeCode');
+            $table->string('remark')->nullable();
             $table->timestamps();
         });
     }
-
 
     /**
      * Reverse the migrations.
      */
     public function down(): void
     {
-        Schema::dropIfExists('insurances');
+        //
     }
 };
