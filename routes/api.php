@@ -15,6 +15,7 @@ use App\Http\Controllers\MapImportedItemController;
 use App\Http\Controllers\MappingPurchaseController;
 use App\Http\Controllers\StockAdjustmentController;
 use App\Http\Controllers\ItemOpeningStockController;
+use App\Http\Controllers\UpdateStockIODataController;
 use App\Http\Controllers\ItemClassificationController;
 use App\Http\Controllers\AddDirectCreditNoteController;
 use App\Http\Controllers\StockUpdateByInvoiceNoController;
@@ -60,6 +61,9 @@ Route::apiResource('AddDirectCreditNote', AddDirectCreditNoteController::class);
 Route::apiResource('StockAdjustment', StockAdjustmentController::class);
 // StockUpdateByInvoiceNoController
 Route::apiResource('StockUpdate/ByInvoiceNo', StockUpdateByInvoiceNoController::class);
+// UpdateStockIOData
+Route::apiResource('UpdateStockIOData', UpdateStockIODataController::class);
+
 
 Route::apiResource('GetNoticeList', NoticeController::class)->only([
     'index',

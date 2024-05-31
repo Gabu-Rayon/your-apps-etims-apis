@@ -17,78 +17,70 @@ class UpdateStockIODataController extends Controller
         try {
             $data = $request->all();
 
-            $validator = Validator::make($request->all(), [
+            $validator = Validator::make($data, [
                 'storeReleaseTypeCode' => 'required|string',
                 'remark' => 'required|string',
-                
-                'StockItemList' => 'required|array',                
+                'StockItemList' => 'required|array',
                 'StockItemList.*.itemCode' => 'required|string',
-                'StockItemList.*.packageQuantity' => 'required|string',
-                'StockItemList.*.quantity' => 'required|string',
-                
+                'StockItemList.*.packageQuantity' => 'required|numeric',
+                'StockItemList.*.quantity' => 'required|numeric',
             ]);
 
             if ($validator->fails()) {
                 return response()->json([
                     'message' => 'Validation failed',
-                    'error' => $validator->errors()->all()
+                    'errors' => $validator->errors()
                 ], 400);
             }
 
-            Log::info('Request data');
-            Log::info($data);
+            Log::info('Request data', $data);
 
-            $updateStockIOData = UpdateStockIOData::create($data);
-            $now = Carbon::now();
+            $updateStockIOData = UpdateStockIOData::create([
+                'storeReleaseTypeCode' => $data['storeReleaseTypeCode'],
+                'remark' => $data['remark']
+            ]);
 
             foreach ($data['StockItemList'] as $item) {
                 $updateStockIODataItemList = new UpdateStockIODataItemList([
-                    'update_stock_IO_data_id' => $updateStockIOData->id,
+                    'update_stock_io_data_id' => $updateStockIOData->id,
+                    'itemCode' => $item['itemCode'],
                     'packageQuantity' => $item['packageQuantity'],
                     'quantity' => $item['quantity'],
                 ]);
                 $updateStockIODataItemList->save();
             }
 
-            // foreach ($data['updateStockIODataItemList'] as $item) {
-            //     $purchase->updateStockIODataItemList()->create($item);
-            // }
-
-            // Reload the purchase with its items
             $updateStockIOData = UpdateStockIOData::with('updateStockIODataItemList')->find($updateStockIOData->id);
 
+            Log::info('New Update Stock IO Data Item List Items created successfully', $updateStockIOData->toArray());
 
-            Log::info('New Update Stock IO Data Item List Items created successfully');
-            Log::info($updateStockIOData);
+            $now = Carbon::now();
 
             return response()->json([
                 'message' => 'success',
                 'data' => [
-                    "resultCd" => "000",
-                    "resultMsg" => "Successful",
-                    "resultDt" => $now,
-                    "data" => [
+                    'resultCd' => '000',
+                    'resultMsg' => 'Successful',
+                    'resultDt' => $now,
+                    'data' => [
                         'storeReleaseTypeCode' => $updateStockIOData->storeReleaseTypeCode,
                         'remark' => $updateStockIOData->remark,
-                                                
                         'StockItemList' => $updateStockIOData->updateStockIODataItemList->map(function ($item) {
                             return [
                                 'itemCode' => $item->itemCode,
                                 'packageQuantity' => $item->packageQuantity,
-                                'quantity' => $item->quantity,                                                                
+                                'quantity' => $item->quantity,
                             ];
                         })->toArray(),
                     ]
                 ]
             ]);
         } catch (Exception $e) {
-            Log::error('Failed to Update Stock IO Data Item List Items !!');
-            Log::error($e);
+            Log::error('Failed to Update Stock IO Data Item List Items', ['error' => $e->getMessage()]);
             return response()->json([
-                'message' => 'Failed to Update Stock IO Data Item List Items ! !',
+                'message' => 'Failed to Update Stock IO Data Item List Items',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
-
 }
