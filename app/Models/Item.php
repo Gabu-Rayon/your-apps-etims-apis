@@ -44,4 +44,9 @@ class Item extends Model
     {
         return $this->hasMany(ItemOpeningStock::class, 'itemCode', 'itemCode');
     }
+
+    public function stock_move_items()
+    {
+        return $this->hasMany(StockMoveItem::class, 'itemCd', 'itemCode');
+    }
 }

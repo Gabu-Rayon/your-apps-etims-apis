@@ -4,6 +4,7 @@ use App\Http\Controllers\BranchController;
 use App\Http\Controllers\BranchUserController;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\PurchaseController;
+use App\Http\Controllers\CodeController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\GetPurchaseListController;
 use App\Http\Controllers\MapImportedItemController;
@@ -19,8 +20,6 @@ use App\Http\Controllers\ItemClassificationController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\ItemOpeningStockController;
 use App\Http\Controllers\NoticeController;
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,3 +110,4 @@ Route::apiResource('ItemOpeningStock', ItemOpeningStockController::class)->only(
     'update',
     'destroy'
 ]);
+Route::post('/AddInsurance', [InsuranceController::class, 'addInsurance']);
