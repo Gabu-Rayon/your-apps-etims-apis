@@ -2,24 +2,18 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Code;
+use App\Models\ItemOpeningStock;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
-class CodeController extends Controller
+class ItemOpeningStockController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
     public function index() {
         try {
-            $codes = Code::all();
+            $itemOpeningStocks = ItemOpeningStock::all();
             $now = date('YmdHis');
-            foreach ($codes as $code) {
-                $code['dtlList'] = $code->details()->get();
-            }
-            Log::info('Codes retrieved successfully');
-            Log::info($codes);
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -27,15 +21,13 @@ class CodeController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'clsList' => $codes
+                        'itemOpeningStockLst' => $itemOpeningStocks
                     ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to get codes');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to get codes',
+                'message' => 'Failed to get Item Opening Stocks',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -46,38 +38,31 @@ class CodeController extends Controller
      */
     public function store(Request $request) {
         try {
-
             $data = $request->all();
+
+            $createdItemOpeningStocks = [];
+
+            foreach ($data["openingItemsLists"] as $itemOpeningStock) {
+                $itemOpngStck = ItemOpeningStock::create($itemOpeningStock);
+
+                array_push($createdItemOpeningStocks, $itemOpngStck);
+            }
+
             $now = date('YmdHis');
-
-            $code = new Code();
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code created successfully');
-            Log::info($code);
-
             return response()->json([
                 'message' => 'success',
                 'data' => [
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'openingItemsLists' => $createdItemOpeningStocks
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to create code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to create code',
+                'message' => 'Failed to create Item Opening Stock',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -86,23 +71,14 @@ class CodeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Code $code) {
+    public function update(Request $request, ItemOpeningStock $itemOpeningStock) {
         try {
             $data = $request->all();
             $now = date('YmdHis');
 
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code updated successfully');
-            Log::info($code);
+            $itemOpeningStock->itemCode = $data['itemCode'];
+            $itemOpeningStock->openingStock = $data['openingStock'];
+            $itemOpeningStock->save();
 
             return response()->json([
                 'message' => 'success',
@@ -110,14 +86,14 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'itemOpeningStock' => $itemOpeningStock
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to update code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to update code',
+                'message' => 'Failed to update Item Opening Stock',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -126,29 +102,24 @@ class CodeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Code $code) {
+    public function destroy(ItemOpeningStock $itemOpeningStock) {
         try {
-            $code->delete();
-
+            $itemOpeningStock->delete();
             $now = date('YmdHis');
-
-            Log::info('Code deleted successfully');
-
             return response()->json([
                 'message' => 'success',
                 'data' => [
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "data" => null
+                    "data" => [
+                        'itemOpeningStock' => $itemOpeningStock
+                    ]
                 ]
             ]);
-
         } catch (\Exception $e) {
-            Log::error('Failed to delete code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to delete code',
+                'message' => 'Failed to delete Item Opening Stock',
                 'error' => $e->getMessage()
             ], 500);
         }

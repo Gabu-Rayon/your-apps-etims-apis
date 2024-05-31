@@ -2,24 +2,19 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Code;
+use App\Models\ItemClassification;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Log;
 
-class CodeController extends Controller
+class ItemClassificationController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index()
+    {
         try {
-            $codes = Code::all();
+            $itemClassification = ItemClassification::all();
             $now = date('YmdHis');
-            foreach ($codes as $code) {
-                $code['dtlList'] = $code->details()->get();
-            }
-            Log::info('Codes retrieved successfully');
-            Log::info($codes);
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -27,15 +22,13 @@ class CodeController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'clsList' => $codes
+                        'itemClsList' => $itemClassification
                     ]
                 ]
-            ]);
+            ], 200);
         } catch (\Exception $e) {
-            Log::error('Failed to get codes');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to get codes',
+                'message' => 'An error occurred while retrieving item classification list',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -46,23 +39,18 @@ class CodeController extends Controller
      */
     public function store(Request $request) {
         try {
-
             $data = $request->all();
             $now = date('YmdHis');
 
-            $code = new Code();
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code created successfully');
-            Log::info($code);
+            $itemClassification = new ItemClassification();
+            $itemClassification->itemCls = $data['itemCls'];
+            $itemClassification->itemClsNm = $data['itemClsNm'];
+            $itemClassification->itemClsDesc = $data['itemClsDesc'];
+            $itemClassification->useYn = $data['useYn'];
+            $itemClassification->userDfnNm1 = $data['userDfnNm1'];
+            $itemClassification->userDfnNm2 = $data['userDfnNm2'];
+            $itemClassification->userDfnNm3 = $data['userDfnNm3'];
+            $itemClassification->save();
 
             return response()->json([
                 'message' => 'success',
@@ -70,14 +58,14 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'itemCls' => $itemClassification
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to create code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to create code',
+                'message' => 'An error occurred while storing item classification',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -86,23 +74,19 @@ class CodeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Code $code) {
+    public function update(Request $request, ItemClassification $itemClassification) {
         try {
             $data = $request->all();
             $now = date('YmdHis');
 
-            $code->cdCls = $data['cdCls'];
-            $code->cdClsNm = $data['cdClsNm'];
-            $code->cdClsDesc = $data['cdClsDesc'];
-            $code->useYn = $data['useYn'];
-            $code->userDfnNm1 = $data['userDfnNm1'];
-            $code->userDfnNm2 = $data['userDfnNm2'];
-            $code->userDfnNm3 = $data['userDfnNm3'];
-
-            $code->save();
-
-            Log::info('Code updated successfully');
-            Log::info($code);
+            $itemClassification->itemCls = $data['itemCls'];
+            $itemClassification->itemClsNm = $data['itemClsNm'];
+            $itemClassification->itemClsDesc = $data['itemClsDesc'];
+            $itemClassification->useYn = $data['useYn'];
+            $itemClassification->userDfnNm1 = $data['userDfnNm1'];
+            $itemClassification->userDfnNm2 = $data['userDfnNm2'];
+            $itemClassification->userDfnNm3 = $data['userDfnNm3'];
+            $itemClassification->save();
 
             return response()->json([
                 'message' => 'success',
@@ -110,14 +94,14 @@ class CodeController extends Controller
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
-                    "code" => $code
+                    "data" => [
+                        'itemCls' => $itemClassification
+                    ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to update code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to update code',
+                'message' => 'An error occurred while updating item classification',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -126,13 +110,11 @@ class CodeController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Code $code) {
+    public function destroy(ItemClassification $itemClassification) {
         try {
-            $code->delete();
+            $itemClassification->delete();
 
             $now = date('YmdHis');
-
-            Log::info('Code deleted successfully');
 
             return response()->json([
                 'message' => 'success',
@@ -145,10 +127,8 @@ class CodeController extends Controller
             ]);
 
         } catch (\Exception $e) {
-            Log::error('Failed to delete code');
-            Log::error($e);
             return response()->json([
-                'message' => 'Failed to delete code',
+                'message' => 'An error occurred while deleting item classification',
                 'error' => $e->getMessage()
             ], 500);
         }

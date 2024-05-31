@@ -3,7 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\User;
-// use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 use App\Models\GetPurchaseList;
@@ -26,6 +26,7 @@ class DatabaseSeeder extends Seeder
 
         $this->call(CodeSeeder::class);
         $this->call(DetailSeeder::class);
+<<<<<<< HEAD
 =======
     //     User::factory()->create([
     //         'name' => 'Test User',
@@ -50,6 +51,10 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 >>>>>>> AddDirectCreditNoteApi
+=======
+        $this->call(ItemClassificationSeeder::class);
+        $this->call(NoticeSeeder::class);
+>>>>>>> d1e8d9c666255312617ca144ff40e0db1faf3ad5
     }
 
 }

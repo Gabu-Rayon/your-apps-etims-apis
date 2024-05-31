@@ -5,14 +5,16 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Insurance extends Model
+class Notice extends Model
 {
     use HasFactory;
 
     protected $fillable = [
-        'insuranceCode',
-        'insuranceName',
-        'premiumRate',
-        'isUsed',
+        "noticeNo",
+        "title",
+        "cont",
+        "dtlUrl",
+        "regrNm",
+        "regDt"
     ];
 }
