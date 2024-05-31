@@ -16,4 +16,5 @@ class UpdateStockIOData extends Model
     {
         return $this->hasMany(UpdateStockIODataItemList::class, 'update_stock_io_data_id');
     }
+    
 }
