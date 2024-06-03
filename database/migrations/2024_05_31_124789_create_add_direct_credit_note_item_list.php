@@ -4,32 +4,30 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAddDirectCreditNoteItemListTable extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
-     *
-     * @return void
      */
-    public function up()
+    public function up(): void
     {
-        Schema::create('add_direct_credit_note_item_list', function (Blueprint $table) {
+        Schema::create('direct_credit_note_items', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('add_direct_credit_note_id')->constrained('add_direct_credit_note')->onDelete('cascade');
+            $table->unsignedBigInteger('direct_credit_note_id');
             $table->string('itemCode');
             $table->decimal('unitPrice', 15, 2);
             $table->integer('quantity');
+
+            $table->foreign('direct_credit_note_id')->references('id')->on('direct_credit_notes')->onDelete('cascade');
             $table->timestamps();
         });
     }
 
     /**
      * Reverse the migrations.
-     *
-     * @return void
      */
-    public function down()
+    public function down(): void
     {
-        Schema::dropIfExists('add_direct_credit_note_item_list');
+        Schema::dropIfExists('direct_credit_note_items');
     }
-}
+};
