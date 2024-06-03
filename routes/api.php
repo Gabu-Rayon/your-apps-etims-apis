@@ -18,6 +18,7 @@ use App\Http\Controllers\ItemOpeningStockController;
 use App\Http\Controllers\UpdateStockIODataController;
 use App\Http\Controllers\ItemClassificationController;
 use App\Http\Controllers\AddDirectCreditNoteController;
+use App\Http\Controllers\AddSaleController;
 use App\Http\Controllers\StockUpdateByInvoiceNoController;
 use App\Http\Controllers\MapPurchaseSearchByDateController;
 use App\Http\Controllers\UpdateMapPurchaseStatusController;
@@ -76,6 +77,10 @@ Route::apiResource('GetNoticeList', NoticeController::class)->only([
     'store',
     'update',
     'destroy'
+]);
+Route::apiResource('AddSale', AddSaleController::class)->only([
+    'index',
+    'store',
 ]);
 Route::apiResource('GetItemClassificationList', ItemClassificationController::class)->only([
     'index',
