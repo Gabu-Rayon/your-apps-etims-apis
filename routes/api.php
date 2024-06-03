@@ -61,7 +61,10 @@ Route::apiResource('UpdateMapPurchaseStatus', UpdateMapPurchaseStatusController:
 Route::apiResource('SearchByDate', MapPurchaseSearchByDateController::class);
 Route::apiResource('AddDirectCreditNote', AddDirectCreditNoteController::class);
 // StockAdjustmentController
-Route::apiResource('StockAdjustment', StockAdjustmentController::class);
+Route::apiResource('StockAdjustment', StockAdjustmentController::class)->only(
+    'index',
+    'store'
+);
 // StockUpdateByInvoiceNoController
 Route::apiResource('StockUpdate/ByInvoiceNo', StockUpdateByInvoiceNoController::class);
 // UpdateStockIOData

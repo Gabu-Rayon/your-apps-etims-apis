@@ -2,92 +2,119 @@
 
 namespace App\Http\Controllers;
 
-use Exception;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\Models\Item;
 use App\Models\StockAdjustment;
+use App\Models\StockAdjustmentItemList;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
-use App\Models\StockAdjustmentItemList;
 
-class StockAdjustmentController extends Controller
-{
-    public function store(Request $request)
-    {
+class StockAdjustmentController extends Controller {
+
+    public function index() {
         try {
-            $data = $request->all();
+            $stockAdjustments = StockAdjustment::all();
+            $now = date('YmdHis');
+            Log::info('Stock Adjustments retrieved successfully');
+            Log::info($stockAdjustments);
 
-            // Validate the request data
-            $validator = Validator::make($data, [
-                'storeReleaseTypeCode' => 'required|string',
-                'remark' => 'nullable|string',
-                'stockItemList' => 'required|array',
-                'stockItemList.*.itemCode' => 'required|string',
-                'stockItemList.*.packageQuantity' => 'required|integer',
-                'stockItemList.*.quantity' => 'required|integer',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'message' => 'Validation failed',
-                    'error' => $validator->errors()->all()
-                ], 400);
+            foreach ($stockAdjustments as $stockAdjustment) {
+                $stockAdjustment['stockItemList'] = $stockAdjustment->items()->get();
             }
-
-            // Log request data for debugging
-            Log::info('Request data', $data);
-
-            // Create StockAdjustment
-            $stockAdjustment = StockAdjustment::create([
-                'storeReleaseTypeCode' => $data['storeReleaseTypeCode'],
-                'remark' => $data['remark'],
-            ]);
-
-            // Create related StockAdjustmentItemList entries
-            foreach ($data['stockItemList'] as $item) {
-                $stockAdjustment->items()->create([
-                    'itemCode' => $item['itemCode'],
-                    'packageQuantity' => $item['packageQuantity'],
-                    'quantity' => $item['quantity'],
-                ]);
-            }
-
-            // Fetch the newly created StockAdjustment with related items
-            $stockAdjustment = StockAdjustment::with('items')->find($stockAdjustment->id);
-
-            // Log success
-            Log::info('New Stock Adjustment Added successfully', ['stockAdjustment' => $stockAdjustment]);
-
-            // Prepare and return response
             return response()->json([
                 'message' => 'success',
                 'data' => [
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
-                    "resultDt" => Carbon::now(),
+                    "resultDt" => $now,
                     "data" => [
-                        'storeReleaseTypeCode' => $stockAdjustment->storeReleaseTypeCode,
-                        'remark' => $stockAdjustment->remark,
-                        'stockItemList' => $stockAdjustment->items->map(function ($item) {
-                            return [
-                                'itemCode' => $item->itemCode,
-                                'packageQuantity' => $item->packageQuantity,
-                                'quantity' => $item->quantity,
-                            ];
-                        })->toArray(),
+                        'stockAdjustmentList' => $stockAdjustments
                     ]
                 ]
             ]);
-        } catch (Exception $e) {
-            // Log error
-            Log::error('Failed to Add Stock Adjustment', ['error' => $e]);
-
-            // Return error response
+        } catch (\Exception $e) {
+            Log::error('Failed to get stock adjustments');
+            Log::error($e);
             return response()->json([
-                'message' => 'Failed to Add Stock Adjustment',
+                'message' => 'Failed to get stock adjustments',
                 'error' => $e->getMessage()
             ], 500);
         }
     }
 
+    public function store() {
+        try {
+
+            $data = request()->all();
+
+            $validator = Validator::make($data, [
+                'storeReleaseTypeCode' => 'required|string|min:1|',
+                'remark' => 'string|min:1|nullable',
+                'stockItemList' => 'required|array',
+                'stockItemList.*.itemCode' => 'required|string|min:1',
+                'items.*.quantity' => 'required|numeric',
+                'items.*.packageQuantity' => 'required|numeric',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => $validator->errors()
+                ], 400);
+            }
+
+            Log::info('Validated');
+
+            $stockAdjustment = new StockAdjustment();
+            $stockAdjustment->storeReleaseTypeCode = $data['storeReleaseTypeCode'];
+            $stockAdjustment->remark = $data['remark'];
+            $stockAdjustment->save();
+
+            $stockItemList = [];
+
+            foreach ($data['stockItemList'] as $stockItem) {
+                $stockAdjustmentItem = new StockAdjustmentItemList();
+                $stockAdjustmentItem->itemCode = $stockItem['itemCode'];
+                $stockAdjustmentItem->quantity = $stockItem['quantity'];
+                $stockAdjustmentItem->packageQuantity = $stockItem['packageQuantity'];
+                $stockAdjustmentItem->stock_adjustment_id = $stockAdjustment->id;
+                $stockAdjustmentItem->save();
+                array_push($stockItemList, $stockAdjustmentItem);
+
+                $item = Item::where('itemCode', $stockItem['itemCode'])->first();
+
+                if ($item) {
+                    $item->quantity = $item->quantity + $stockItem['quantity'];
+                    $item->packageQuantity = $item->packageQuantity + $stockItem['packageQuantity'];
+                    $item->save();
+                } else {
+                    return response()->json([
+                        'message' => 'Item not found',
+                        'error' => 'Item not found'
+                    ], 404);
+                }
+            }
+
+            $stockAdjustment['stockItemList'] = $stockItemList;
+
+            Log::info('Stock adjustments created successfully');
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => date('YmdHis'),
+                    "data" => [
+                        'stockAdjustment' => $stockAdjustment
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to create stock adjustments');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to create stock adjustments',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 }
