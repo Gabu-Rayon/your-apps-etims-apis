@@ -18,6 +18,11 @@ class StockMoveListController extends Controller
             $now = date('YmdHis');
             Log::info('Stock Moves retrieved successfully');
             Log::info($stockMoves);
+
+            foreach ($stockMoves as $stockMove) {
+                $stockMove['itemList'] = $stockMove->items()->get();
+            }
+
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -25,7 +30,7 @@ class StockMoveListController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'bhfList' => $stockMoves
+                        'stockList' => $stockMoves
                     ]
                 ]
             ]);

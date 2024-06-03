@@ -22,6 +22,9 @@ use App\Http\Controllers\StockUpdateByInvoiceNoController;
 use App\Http\Controllers\MapPurchaseSearchByDateController;
 use App\Http\Controllers\UpdateMapPurchaseStatusController;
 use App\Http\Controllers\GetImportedItemInformationController;
+use App\Http\Controllers\StockMoveListController;
+use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,6 +117,12 @@ Route::apiResource('GetBranchList', BranchController::class)->only([
     'destroy'
 ]);
 Route::apiResource('ItemOpeningStock', ItemOpeningStockController::class)->only([
+    'index',
+    'store',
+    'update',
+    'destroy'
+]);
+Route::apiResource('StockMoveList', StockMoveListController::class)->only([
     'index',
     'store',
     'update',
