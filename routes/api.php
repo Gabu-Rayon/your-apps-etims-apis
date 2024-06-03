@@ -22,7 +22,6 @@ use App\Http\Controllers\ItemOpeningStockController;
 use App\Http\Controllers\UpdateStockIODataController;
 use App\Http\Controllers\ItemClassificationController;
 use App\Http\Controllers\AddDirectCreditNoteController;
-use App\Http\Controllers\AddSaleController;
 use App\Http\Controllers\StockUpdateByInvoiceNoController;
 use App\Http\Controllers\MapPurchaseSearchByDateController;
 use App\Http\Controllers\UpdateMapPurchaseStatusController;
