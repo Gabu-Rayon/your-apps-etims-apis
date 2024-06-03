@@ -1,13 +1,17 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Request;
 use App\Http\Controllers\CodeController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\BranchController;
 use App\Http\Controllers\NoticeController;
+use App\Http\Controllers\AddSaleController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\InsuranceController;
 use App\Http\Controllers\BranchUserController;
+use App\Http\Controllers\StockMoveListController;
 use App\Http\Controllers\InitializationController;
 use App\Http\Controllers\CompositionItemController;
 use App\Http\Controllers\GetPurchaseListController;
@@ -23,9 +27,6 @@ use App\Http\Controllers\StockUpdateByInvoiceNoController;
 use App\Http\Controllers\MapPurchaseSearchByDateController;
 use App\Http\Controllers\UpdateMapPurchaseStatusController;
 use App\Http\Controllers\GetImportedItemInformationController;
-use App\Http\Controllers\StockMoveListController;
-use Illuminate\Support\Facades\Request;
-use Illuminate\Support\Facades\Route;
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +59,7 @@ Route::apiResource('GetImportedItemInformation', GetImportedItemInformationContr
 Route::apiResource('GetPurchaseList', GetPurchaseListController::class);
 Route::apiResource('MapImportedItem', MapImportedItemController::class);
 Route::apiResource('MapPurchase', MappingPurchaseController::class);
+Route::apiResource('AddSale', AddSaleController::class);
 Route::apiResource('UpdateMapPurchaseStatus', UpdateMapPurchaseStatusController::class);
 Route::apiResource('SearchByDate', MapPurchaseSearchByDateController::class);
 Route::apiResource('AddDirectCreditNote', AddDirectCreditNoteController::class);
