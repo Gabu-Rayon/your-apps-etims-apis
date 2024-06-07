@@ -26,6 +26,6 @@ class StockMoveList extends Model
     }
 
     public function items() {
-        return $this->hasMany(StockMoveItem::class);
+        return $this->hasMany(StockMoveItem::class, 'stockMoveId', 'id');
     }
 }
