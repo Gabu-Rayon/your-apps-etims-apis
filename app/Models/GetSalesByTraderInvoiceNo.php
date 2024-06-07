@@ -1,0 +1,75 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class GetSalesByTraderInvoiceNo extends Model
+{
+    use HasFactory;
+    protected $table  = 'get_sales_by_trader_invoice_no';
+    protected $fillable = [
+        'trderInvoiceNo',
+        'invoiceNo',
+        'orgInvoiceNo',
+        'customerTin',
+        'customerName',
+        'receptTypeCode',
+        'paymentTypeCode',
+        'salesSttsCode',
+        'confirmDate',
+        'salesDate',
+        'stockReleaseDate',
+        'cancelReqDate',
+        'cancelDate',
+        'refundDate',
+        'refundReasonCd',
+        'totalItemCnt',
+        'taxableAmtA',
+        'taxableAmtB',
+        'taxableAmtC',
+        'taxableAmtD',
+        'taxRateA',
+        'taxRateB',
+        'taxRateC',
+        'taxRateD',
+        'taxAmtA',
+        'taxAmtB',
+        'taxAmtC',
+        'taxAmtD',
+        'totalTaxableAmt',
+        'totalTaxAmt',
+        'totalAmt',
+        'prchrAcptcYn',
+        'remark',
+        'regrNm',
+        'regrId',
+        'modrNm',
+        'modrId',
+        'receipt_CustomerTin',
+        'receipt_CustomerMblNo',
+        'receipt_RptNo',
+        'receipt_RcptPbctDt',
+        'receipt_TrdeNm',
+        'receipt_Adrs',
+        'receipt_TopMsg',
+        'receipt_BtmMsg',
+        'receipt_PrchrAcptcYn',
+        'createdDate',
+        'isKRASynchronized',
+        'kraSynchronizedDate',
+        'isStockIOUpdate',
+        'resultCd',
+        'resultMsg',
+        'resultDt',
+        'response_CurRcptNo',
+        'response_TotRcptNo',
+        'response_IntrlData',
+        'response_RcptSign',
+        'response_SdcDateTime',
+        'response_SdcId',
+        'response_MrcNo',
+        'qrCodeURL',
+    ];
+}
