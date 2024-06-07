@@ -7,13 +7,40 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\AddSale;
 use App\Models\AddSaleItemList;
 use Exception;
-use Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AddSaleController extends Controller
 {
-    public function store(Request $request)
-    {
+
+    public function index() {
+        try {
+            $sales = AddSale::with('addSaleItemList')->get();
+            $now = date('YmdHis');
+            Log::info('Sales retrieved successfully');
+            Log::info($sales);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'salesList' => $sales
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get sales');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get sales',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function store(Request $request) {
         try {
             $data = $request->all();
 

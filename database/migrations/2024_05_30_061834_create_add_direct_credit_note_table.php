@@ -8,7 +8,7 @@ class CreateAddDirectCreditNoteTable extends Migration
 {
     public function up()
     {
-        Schema::create('add_direct_credit_note', function (Blueprint $table) {
+        Schema::create('direct_credit_notes', function (Blueprint $table) {
             $table->id();
             $table->string('orgInvoiceNo');
             $table->string('traderInvoiceNo');
@@ -32,6 +32,6 @@ class CreateAddDirectCreditNoteTable extends Migration
 
     public function down()
     {
-        Schema::dropIfExists('add_direct_credit_note');
+        Schema::dropIfExists('direct_credit_notes');
     }
 }
