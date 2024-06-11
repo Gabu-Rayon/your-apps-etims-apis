@@ -13,6 +13,7 @@ class NoticeController extends Controller
     public function index()
     {
         try {
+            // TODO: add date parameter so that only notices created after that date are returned
             $notices = Notice::all();
             $now = date('YmdHis');
             return response()->json([

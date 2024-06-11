@@ -13,6 +13,7 @@ class ItemClassificationController extends Controller
     public function index()
     {
         try {
+            // TODO: add date parameter so that only item classifications created after that date are returned
             $itemClassification = ItemClassification::all();
             $now = date('YmdHis');
             return response()->json([

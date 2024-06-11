@@ -15,6 +15,7 @@ class ItemController extends Controller
      */
     public function index() {
         try {
+            //TODO: add date parameter so that only items created after that date are returned
             $items = Item::all();
             $now = date('YmdHis');
             Log::info('Items retrieved successfully');

@@ -13,6 +13,7 @@ class BranchController extends Controller
      */
     public function index() {
         try {
+            // TODO: add the date parameter so that the data is only retrieved if it is newer than the date parameter
             $branches = Branch::all();
             $now = date('YmdHis');
             Log::info('Branches retrieved successfully');

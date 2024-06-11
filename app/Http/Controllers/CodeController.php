@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Code;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -13,6 +14,7 @@ class CodeController extends Controller
      */
     public function index() {
         try {
+            // TODO: add date parameter so that only codes created after that date are returned
             $codes = Code::all();
             $now = date('YmdHis');
             foreach ($codes as $code) {
@@ -48,6 +50,26 @@ class CodeController extends Controller
         try {
 
             $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'cdCls' => 'required|string|max:10',
+                'cdClsNm' => 'required|string|max:50',
+                'cdClsDesc' => 'string|max:100',
+                'useYn' => 'required|string|max:1',
+                'userDfnNm1' => 'string|max:50',
+                'userDfnNm2' => 'string|max:50',
+                'userDfnNm3' => 'string|max:50'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => $validator->errors()
+                ], 400);
+            }
+
+            // TODO: Add create details so that the details are created along with the code
+            
             $now = date('YmdHis');
 
             $code = new Code();

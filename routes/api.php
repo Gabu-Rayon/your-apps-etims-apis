@@ -9,6 +9,7 @@ use App\Http\Controllers\MapImportedItemController;
 use App\Http\Controllers\MappingPurchaseController;
 use App\Http\Controllers\AddSaleCreditNoteController;
 use App\Http\Controllers\AddDirectCreditNoteController;
+use App\Http\Controllers\CodeController;
 use App\Http\Controllers\MapPurchaseSearchByDateController;
 use App\Http\Controllers\UpdateMapPurchaseStatusController;
 use App\Http\Controllers\GetSalesByTraderInvoiceNoController;
@@ -31,6 +32,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 
 Route::apiResource('insurance', InsuranceController::class);
+Route::apiResource('code', CodeController::class);
 Route::apiResource('purchase', PurchaseController::class);
 Route::apiResource('GetImportedItemInformation', GetImportedItemInformationController::class);
 Route::apiResource('GetPurchaseList', GetPurchaseListController::class);
