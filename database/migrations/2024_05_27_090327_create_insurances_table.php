@@ -16,7 +16,8 @@ return new class extends Migration
             $table->string('insuranceCode', 10)->unique();
             $table->string('insuranceName');
             $table->decimal('premiumRate', 8, 2);
-            $table->boolean('isUsed');
+            $table->boolean('isUsed')->default(false);
+            // TODO: Add a branch id column
             $table->timestamps();
         });
     }

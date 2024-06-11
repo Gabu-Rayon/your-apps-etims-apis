@@ -11,8 +11,29 @@ class InsuranceController extends Controller
 {
     public function index()
     {
-        $insurances = Insurance::all();
-        return response()->json($insurances);
+        try {
+            $insurances = Insurance::all();
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'statusCode' => 200,
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'insurance : ' => $insurances
+                    ]
+                ]
+            ]);
+        } catch (Exception $e) {
+            Log::error('Failed to get Insurances');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get Insurance',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function show($id)
@@ -50,6 +71,7 @@ class InsuranceController extends Controller
 
             return response()->json([
                 'message' => 'success',
+                'statusCode' => 200,
                 'data' => [
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
