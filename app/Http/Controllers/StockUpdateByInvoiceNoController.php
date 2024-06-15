@@ -5,82 +5,57 @@ namespace App\Http\Controllers;
 use App\Models\AddSale;
 use App\Models\Item;
 use Exception;
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Models\StockUpdateByInvoiceNo;
-use Illuminate\Support\Facades\Validator;
 
 class StockUpdateByInvoiceNoController extends Controller
 {
-    public function store(Request $request)
-    {
+    public function store (Request $request) {
         try {
-            $data = $request->all();
 
-            $validator = Validator::make($data, [
-                'InvoiceNo' => 'required|integer',
-            ]);
+            $invoiceNo = $request->query('invoiceNo');
 
-            if ($validator->fails()) {
+            if (!$invoiceNo) {
                 return response()->json([
                     'message' => 'Validation failed',
-                    'errors' => $validator->errors()->all()
+                    'error' => 'invoiceNo is required'
                 ], 400);
             }
 
-            $sale = AddSale::find($data['InvoiceNo']);
-            $saleItems = $sale->addSaleItemList;
+            $sale = AddSale::where('traderInvoiceNo', $invoiceNo)->first();
 
             if (!$sale) {
                 return response()->json([
-                    'message' => 'Sale not found'
-                ], 404);
-            }
-
-            if ($sale->isStockIOUpdate == 1) {
-                return response()->json([
-                    'message' => 'Stock already updated'
+                    'message' => 'Validation failed',
+                    'error' => 'Sale Details not found'
                 ], 400);
             }
 
-            Log::info('Sale Items found');
-            Log::info($saleItems);
-
-            if (count($saleItems) == 0) {
-                return response()->json([
-                    'message' => 'No Sale Items found'
-                ], 404);
-            }
+            $saleItems = $sale->addSaleItemList;
 
             foreach ($saleItems as $saleItem) {
-                $stockItem = Item::where('itemCode', $saleItem->itemCode)->first();
-                Log::info('Stock Item found');
-                Log::info($stockItem);
+                $item = Item::where('itemCode', $saleItem->itemCode)->first();
 
-                $stockItem->quantity = $stockItem->quantity - $saleItem->quantity;
-                $stockItem->packageQuantity = $stockItem->packageQuantity - $saleItem->packageQuantity;
-
-                $stockItem->save();
+                if ($item) {
+                    $item->quantity = $item->quantity - $saleItem->quantity;
+                    $item->packageQuantity = $item->packageQuantity - $saleItem->pkgQuantity;
+                    $item->save();
+                } else {
+                    return response()->json([
+                        'message' => 'Validation failed',
+                        'error' => 'Item not found'
+                    ], 400);
+                }
             }
-
-            $sale->isStockIOUpdate = 1;
-            $sale->stockReleseDate = date('YmdHis');
-            $sale->save();
-
-
 
             return response()->json([
                 'message' => 'Stock updated successfully'
-            ]);
-
+            ], 200);
         } catch (Exception $e) {
-            Log::error('Failed to Update Stock By InvoiceNo !!');
-            
+            Log::error('Failed to update stock by invoice no');
             Log::error($e);
-            
             return response()->json([
-                'message' => 'Failed to Update Stock By InvoiceNo !',
+                'message' => 'Failed to update stock by invoice no',
                 'error' => $e->getMessage()
             ], 500);
         }

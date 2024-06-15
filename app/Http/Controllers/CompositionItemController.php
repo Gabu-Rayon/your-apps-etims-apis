@@ -40,6 +40,36 @@ class CompositionItemController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+
+    public function show(CompositionItem $compositionItem) {
+        try {
+            $now = date('YmdHis');
+            Log::info('Composition Item retrieved successfully');
+            Log::info($compositionItem);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'compositionItem' => $compositionItem
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get Composition Item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get Composition Item',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request)

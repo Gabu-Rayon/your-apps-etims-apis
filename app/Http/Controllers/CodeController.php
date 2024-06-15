@@ -12,16 +12,31 @@ class CodeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index(Request $request) {
         try {
-            // TODO: add date parameter so that only codes created after that date are returned
-            $codes = Code::all();
-            $now = date('YmdHis');
-            foreach ($codes as $code) {
-                $code['dtlList'] = $code->details()->get();
+
+            $date = $request->query('date');
+
+            // check that the date format is correct (YmdHis)
+
+            if (!$date) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date is required'
+                ], 400);
             }
-            Log::info('Codes retrieved successfully');
-            Log::info($codes);
+
+            if (!preg_match('/^\d{14}$/', $date)) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date format is incorrect'
+                ], 400);
+            }
+
+            $codes = Code::where('created_at', '>=', $date)->get();
+
+            $now = date('YmdHis');
+
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -29,7 +44,7 @@ class CodeController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'clsList' => $codes
+                        'codes' => $codes
                     ]
                 ]
             ]);
@@ -38,6 +53,32 @@ class CodeController extends Controller
             Log::error($e);
             return response()->json([
                 'message' => 'Failed to get codes',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+
+    public function show(Code $code) {
+        try {
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'code' => $code
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to get code',
                 'error' => $e->getMessage()
             ], 500);
         }

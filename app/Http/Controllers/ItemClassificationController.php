@@ -10,12 +10,28 @@ class ItemClassificationController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
-    {
+    public function index(Request $request){
         try {
-            // TODO: add date parameter so that only item classifications created after that date are returned
-            $itemClassification = ItemClassification::all();
+            $date = $request->query('date');
+
+            if (!$date) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date is required'
+                ], 400);
+            }
+
+            if (!preg_match('/^\d{14}$/', $date)) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date format is incorrect'
+                ], 400);
+            }
+
+            $itemClassifications = ItemClassification::where('created_at', '>=', $date)->get();
+
             $now = date('YmdHis');
+
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -23,13 +39,13 @@ class ItemClassificationController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'itemClsList' => $itemClassification
+                        'itemClassifications' => $itemClassifications
                     ]
                 ]
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'An error occurred while retrieving item classification list',
+                'message' => 'Failed to get item classifications',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -67,6 +83,33 @@ class ItemClassificationController extends Controller
         } catch (\Exception $e) {
             return response()->json([
                 'message' => 'An error occurred while storing item classification',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+
+    public function show(ItemClassification $itemClassification) {
+        try {
+            $now = date('YmdHis');
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'itemCls' => $itemClassification
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'An error occurred while getting item classification',
                 'error' => $e->getMessage()
             ], 500);
         }

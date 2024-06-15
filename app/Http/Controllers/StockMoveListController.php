@@ -12,16 +12,27 @@ class StockMoveListController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index(Request $request) {
         try {
-            $stockMoves = StockMoveList::all();
-            $now = date('YmdHis');
-            Log::info('Stock Moves retrieved successfully');
-            Log::info($stockMoves);
+            $date = $request->query('date');
 
-            foreach ($stockMoves as $stockMove) {
-                $stockMove['itemList'] = $stockMove->items()->get();
+            if (!$date) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date is required'
+                ], 400);
             }
+
+            if (!preg_match('/^\d{14}$/', $date)) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date format is incorrect'
+                ], 400);
+            }
+
+            $stockList = StockMoveList::where('created_at', '>=', $date)->get();
+
+            $now = date('YmdHis');
 
             return response()->json([
                 'message' => 'success',
@@ -30,15 +41,15 @@ class StockMoveListController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'stockList' => $stockMoves
+                        'stockList' => $stockList
                     ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to get Stock Moves');
+            Log::error('Failed to get Stock Move List');
             Log::error($e);
             return response()->json([
-                'message' => 'Failed to get Stock Moves',
+                'message' => 'Failed to get Stock Move List',
                 'error' => $e->getMessage()
             ], 500);
         }
@@ -126,15 +137,25 @@ class StockMoveListController extends Controller
      */
     public function show(StockMoveList $stockList)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(StockMoveList $stockList)
-    {
-        //
+        try {
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'stockMove' => $stockList
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to get Stock Move',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
