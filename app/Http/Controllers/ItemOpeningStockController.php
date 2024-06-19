@@ -34,6 +34,32 @@ class ItemOpeningStockController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+
+    public function show(ItemOpeningStock $itemOpeningStock) {
+        try {
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'itemOpeningStock' => $itemOpeningStock
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to get Item Opening Stock',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {

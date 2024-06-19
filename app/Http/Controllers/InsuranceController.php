@@ -11,14 +11,56 @@ class InsuranceController extends Controller
 {
     public function index()
     {
-        $insurances = Insurance::all();
-        return response()->json($insurances);
+        try {
+            $insurances = Insurance::all();
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'statusCode' => 200,
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'insurances' => $insurances
+                    ]
+                ]
+            ]);
+        } catch (Exception $e) {
+            Log::error('Failed to get Insurances');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get Insurances',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function show($id)
     {
-        $insurances = Insurance::find($id);
-        return response()->json($insurances);
+        try {
+            $insurance = Insurance::find($id);
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'statusCode' => 200,
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'insurance' => $insurance
+                    ]
+                ]
+            ]);
+        } catch (Exception $e) {
+            Log::error('Failed to get Insurance');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get Insurance',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 
     public function store(Request $request) {
@@ -50,12 +92,13 @@ class InsuranceController extends Controller
 
             return response()->json([
                 'message' => 'success',
+                'statusCode' => 200,
                 'data' => [
                     "resultCd" => "000",
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'insurance : ' => $insurance
+                        'insurance' => $insurance
                     ]
                 ]
             ]);
@@ -71,14 +114,98 @@ class InsuranceController extends Controller
 
     public function update(Request $request, $id)
     {
-        $insurances = Insurance::find($id);
-        $insurances->update($request->all());
-        return response()->json($insurances, 200);
+        try {
+            $data = $request->all();
+            $insurance = Insurance::find($id);
+        
+            if (!$insurance) {
+                return response()->json([
+                    'message' => 'Insurance not found'
+                ], 404);
+            }
+        
+            $validator = Validator::make($request->all(), [
+                'insuranceCode' => 'required|string|min:1|max:10',
+                'insuranceName' => 'required|string|min:1|max:100',
+                'premiumRate' => 'required|numeric',
+                'isUsed' => 'boolean',
+            ]);
+        
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => $validator->errors()->all()
+                ], 400);
+            }
+        
+            Log::info('Request data');
+            Log::info($data);
+        
+            $insurance->update($data);
+            $now = date('YmdHis');
+            
+            Log::info('Insurance updated successfully');
+            Log::info($insurance);
+
+            return response()->json([
+                'message' => 'success',
+                'statusCode' => 200,
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'insurance' => $insurance
+                    ]
+                ]
+            ]);
+        } catch (Exception $e) {
+            Log::error('Failed to update Insurance');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to update Insurance',
+                'error' => $e->getMessage()
+            ], 500);
+        
+        }
     }
 
     public function destroy($id)
     {
-        Insurance::destroy($id);
-        return response()->json(null, 204);
+        try {
+            $insurance = Insurance::find($id);
+        
+            if (!$insurance) {
+                return response()->json([
+                    'message' => 'Insurance not found'
+                ], 404);
+            }
+        
+            $insurance->delete();
+            $now = date('YmdHis');
+            
+            Log::info('Insurance deleted successfully');
+            Log::info($insurance);
+
+            return response()->json([
+                'message' => 'success',
+                'statusCode' => 200,
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'insurance' => $insurance
+                    ]
+                ]
+            ]);
+        } catch (Exception $e) {
+            Log::error('Failed to delete Insurance');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to delete Insurance',
+                'error' => $e->getMessage()
+            ], 500);
+        }
     }
 }

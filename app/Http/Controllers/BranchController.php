@@ -11,12 +11,28 @@ class BranchController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index(Request $request) {
         try {
-            $branches = Branch::all();
+            $date = $request->query('date');
+
+            if (!$date) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date is required'
+                ], 400);
+            }
+
+            if (!preg_match('/^\d{14}$/', $date)) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date format is incorrect'
+                ], 400);
+            }
+
+            $branches = Branch::where('created_at', '>=', $date)->get();
+
             $now = date('YmdHis');
-            Log::info('Branches retrieved successfully');
-            Log::info($branches);
+
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -24,7 +40,7 @@ class BranchController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'bhfList' => $branches
+                        'branches' => $branches
                     ]
                 ]
             ]);
@@ -33,6 +49,36 @@ class BranchController extends Controller
             Log::error($e);
             return response()->json([
                 'message' => 'Failed to get branches',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+
+    public function show(Branch $branch) {
+        try {
+            $now = date('YmdHis');
+            Log::info('Branch retrieved successfully');
+            Log::info($branch);
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'branch' => $branch
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get branch');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get branch',
                 'error' => $e->getMessage()
             ], 500);
         }

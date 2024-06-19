@@ -31,4 +31,6 @@ class Branch extends Model
     public function customers () {
         return $this->hasMany(Customer::class, "bhfId", "bhfId");
     }
+
+    // TODO: Add a insurances function to get the insurances that the branch has
 }

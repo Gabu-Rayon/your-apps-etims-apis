@@ -13,12 +13,28 @@ class ItemController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index(Request $request) {
         try {
-            $items = Item::all();
+            $date = $request->query('date');
+
+            if (!$date) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date is required'
+                ], 400);
+            }
+
+            if (!preg_match('/^\d{14}$/', $date)) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date format is incorrect'
+                ], 400);
+            }
+
+            $items = Item::where('created_at', '>=', $date)->get();
+
             $now = date('YmdHis');
-            Log::info('Items retrieved successfully');
-            Log::info($items);
+
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -26,15 +42,44 @@ class ItemController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'itemsList' => $items
+                        'items' => $items
                     ]
                 ]
             ]);
         } catch (\Exception $e) {
-            Log::error('Failed to get items');
-            Log::error($e);
             return response()->json([
                 'message' => 'Failed to get items',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+
+    public function show(Item $item) {
+        try {
+            $now = date('YmdHis');
+            Log::info('Item retrieved successfully');
+            Log::info($item);
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'item' => $item
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get item',
                 'error' => $e->getMessage()
             ], 500);
         }

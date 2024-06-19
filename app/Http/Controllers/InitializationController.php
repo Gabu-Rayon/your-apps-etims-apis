@@ -36,6 +36,33 @@ class InitializationController extends Controller
         }
     }
 
+    public function show(Initialization $initialization) {
+        try {
+            $now = date('YmdHis');
+            Log::info('Initialization retrieved successfully');
+            Log::info($initialization);
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'init' => $initialization
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get initialization');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get initialization',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     public function store(Request $request) {
         try {
 

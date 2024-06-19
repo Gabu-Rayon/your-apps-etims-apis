@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Code;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -11,15 +12,31 @@ class CodeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index() {
+    public function index(Request $request) {
         try {
-            $codes = Code::all();
-            $now = date('YmdHis');
-            foreach ($codes as $code) {
-                $code['dtlList'] = $code->details()->get();
+
+            $date = $request->query('date');
+
+            // check that the date format is correct (YmdHis)
+
+            if (!$date) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date is required'
+                ], 400);
             }
-            Log::info('Codes retrieved successfully');
-            Log::info($codes);
+
+            if (!preg_match('/^\d{14}$/', $date)) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date format is incorrect'
+                ], 400);
+            }
+
+            $codes = Code::where('created_at', '>=', $date)->get();
+
+            $now = date('YmdHis');
+
             return response()->json([
                 'message' => 'success',
                 'data' => [
@@ -27,7 +44,7 @@ class CodeController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'clsList' => $codes
+                        'codes' => $codes
                     ]
                 ]
             ]);
@@ -42,12 +59,58 @@ class CodeController extends Controller
     }
 
     /**
+     * Display the specified resource.
+     */
+
+    public function show(Code $code) {
+        try {
+            $now = date('YmdHis');
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'code' => $code
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to get code',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Store a newly created resource in storage.
      */
     public function store(Request $request) {
         try {
 
             $data = $request->all();
+
+            $validator = Validator::make($data, [
+                'cdCls' => 'required|string|max:10',
+                'cdClsNm' => 'required|string|max:50',
+                'cdClsDesc' => 'string|max:100',
+                'useYn' => 'required|string|max:1',
+                'userDfnNm1' => 'string|max:50',
+                'userDfnNm2' => 'string|max:50',
+                'userDfnNm3' => 'string|max:50'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => $validator->errors()
+                ], 400);
+            }
+
+            // TODO: Add create details so that the details are created along with the code
+            
             $now = date('YmdHis');
 
             $code = new Code();

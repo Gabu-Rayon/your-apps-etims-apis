@@ -16,6 +16,7 @@ class BranchUserController extends Controller
 
      public function index() {
         try {
+       
             $branchUsers = BranchUser::all();
             $now = date('YmdHis');
 
@@ -43,6 +44,39 @@ class BranchUserController extends Controller
         }
     }
 
+    /**
+     * Display the specified resource.
+     */
+
+    public function show(BranchUser $branchUser) {
+        try {
+            $now = date('YmdHis');
+        
+            Log::info('Branch User retrieved successfully');
+            Log::info($branchUser);
+        
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'bhfUsr' => $branchUser
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            Log::error('Failed to get Branch User');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get Branch User',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    
     /**
      * Store a newly created resource in storage.
      */

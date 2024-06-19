@@ -23,7 +23,7 @@ return new class extends Migration
             $table->string('userDfnCd2', 50)->nullable();
             $table->string('userDfnCd3', 50)->nullable();
 
-            $table->foreign('cdCls')->references('cdCls')->on('codes');
+            $table->foreign('cdCls')->references('cdCls')->on('codes')->onDelete('cascade');
             $table->timestamps();
         });
     }

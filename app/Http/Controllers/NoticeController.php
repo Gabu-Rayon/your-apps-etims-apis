@@ -10,10 +10,55 @@ class NoticeController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
         try {
-            $notices = Notice::all();
+            $date = $request->query('date');
+
+            if (!$date) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date is required'
+                ], 400);
+            }
+
+            if (!preg_match('/^\d{14}$/', $date)) {
+                return response()->json([
+                    'message' => 'Validation failed',
+                    'error' => 'date format is incorrect'
+                ], 400);
+            }
+
+            $notices = Notice::where('created_at', '>=', $date)->get();
+
+            $now = date('YmdHis');
+
+            return response()->json([
+                'message' => 'success',
+                'data' => [
+                    "resultCd" => "000",
+                    "resultMsg" => "Successful",
+                    "resultDt" => $now,
+                    "data" => [
+                        'notices' => $notices
+                    ]
+                ]
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'message' => 'Failed to get notices',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+
+    public function show($id) {
+        try {
+            $notice = Notice::find($id);
             $now = date('YmdHis');
             return response()->json([
                 'message' => 'success',
@@ -22,13 +67,13 @@ class NoticeController extends Controller
                     "resultMsg" => "Successful",
                     "resultDt" => $now,
                     "data" => [
-                        'noticeList' => $notices
+                        'notice' => $notice
                     ]
                 ]
-            ], 200);
+            ]);
         } catch (\Exception $e) {
             return response()->json([
-                'message' => 'An error occurred while retrieving item classification list',
+                'message' => 'Failed to get notice',
                 'error' => $e->getMessage()
             ], 500);
         }

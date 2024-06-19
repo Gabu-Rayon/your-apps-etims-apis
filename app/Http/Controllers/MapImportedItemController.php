@@ -13,25 +13,9 @@ use Illuminate\Support\Facades\Validator;
 
 class MapImportedItemController extends Controller
 {
-    public function index()
-    {
-        $purchases = Purchase::all();
-        return response()->json($purchases);
-    }
-
-    public function show($id)
-    {
-        $purchases = Purchase::find($id);
-        return response()->json($purchases);
-    }
-
-
-    public function store(Request $request)
-    {
+    public function store(Request $request){
         try {
             $data = $request->all();
-
-            // Validation rules
             $validator = Validator::make($data, [
                 'importItemStatusCode' => 'required|string',
                 'declarationDate' => 'required|string',
@@ -103,18 +87,5 @@ class MapImportedItemController extends Controller
                 'error' => $e->getMessage()
             ], 500);
         }
-    }
-
-    public function update(Request $request, $id)
-    {
-        $purchases = Purchase::find($id);
-        $purchases->update($request->all());
-        return response()->json($purchases, 200);
-    }
-
-    public function destroy($id)
-    {
-        Purchase::destroy($id);
-        return response()->json(null, 204);
     }
 }
