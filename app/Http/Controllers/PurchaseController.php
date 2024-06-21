@@ -6,6 +6,7 @@ use App\Models\Purchase;
 use App\Models\PurchaseItem;
 use Carbon\Carbon;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -46,7 +47,16 @@ class PurchaseController extends Controller
                     ]
                 ]
             ]);
-        } catch (\Exception $e) {
+        } catch (QueryException $e) {
+            Log::error('Failed to get Purchases');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to get Purchases',
+                'error' => 'Payment type code, Purchase status code, Purchase type code or Item classification code not found'
+            ], 500);
+        }
+        
+        catch (\Exception $e) {
             Log::error('Failed to get Purchases');
             Log::error($e);
             return response()->json([
