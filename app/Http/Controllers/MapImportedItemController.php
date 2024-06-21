@@ -17,7 +17,7 @@ class MapImportedItemController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'importItemStatusCode' => 'required|string',
+                'importItemStatusCode' => 'required|numeric',
                 'declarationDate' => 'required|string',
                 'occurredDate' => 'required|string',
                 'remark' => 'required|string',
