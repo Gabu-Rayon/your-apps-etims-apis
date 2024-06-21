@@ -85,7 +85,14 @@ class CustomerController extends Controller
             $validator = Validator::make($data, [
                 'customerNo' => 'required|unique:customers',
                 'customerTin' => 'required|unique:customers',
-                'customerName' => 'required'
+                'customerName' => 'required',
+                "bhfId" => "required|exists:branches,bhfId",
+                "address" => "required|string",
+                "telNo" => "required|nullable",
+                "email" => "required|email",
+                "faxNo" => "required|nullable",
+                "isUsed" => "required|boolean",
+                "remark " => "string|nullable",
             ]);
 
             if ($validator->fails()) {
