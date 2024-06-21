@@ -105,7 +105,16 @@ class CompositionItemController extends Controller
                     ]
                 ]
             ]);
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
+            Log::error('Failed to update Composition Item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'error',
+                'error' => 'Item not found'
+            ], 500);
+        }
+        
+        catch (Exception $e) {
             Log::error('Failed to create Composition Item');
             Log::error($e);
             return response()->json([
@@ -143,16 +152,7 @@ class CompositionItemController extends Controller
                     ]
                 ]
             ]);
-        } catch (QueryException $e) {
-            Log::error('Failed to update Composition Item');
-            Log::error($e);
-            return response()->json([
-                'message' => 'error',
-                'error' => 'Item not found'
-            ], 500);
-        }
-        
-        catch (\Exception $e) {
+        } catch (\Exception $e) {
             Log::error('Failed to update Composition Item');
             Log::error($e);
             return response()->json([
