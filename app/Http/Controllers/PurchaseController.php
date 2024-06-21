@@ -34,6 +34,12 @@ class PurchaseController extends Controller
 
             $purchases = Purchase::where('created_at', '>=', $date)->get();
 
+            // load each purchase item with its item
+
+            foreach ($purchases as $purchase) {
+                $purchase->purchaseItems->load('item');
+            }
+
             $now = date('YmdHis');
 
             return response()->json([
