@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\CompositionItem;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -142,7 +143,16 @@ class CompositionItemController extends Controller
                     ]
                 ]
             ]);
-        } catch (\Exception $e) {
+        } catch (QueryException $e) {
+            Log::error('Failed to update Composition Item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'error',
+                'error' => 'Item not found'
+            ], 500);
+        }
+        
+        catch (\Exception $e) {
             Log::error('Failed to update Composition Item');
             Log::error($e);
             return response()->json([
