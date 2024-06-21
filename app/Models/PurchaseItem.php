@@ -22,9 +22,16 @@ class PurchaseItem extends Model
         'itemExprDt',
     ];
 
+    protected $with = ['item'];
+
 
     public function purchase()
     {
         return $this->belongsTo(Purchase::class, 'purchase_id');
+    }
+
+    public function item ()
+    {
+        return $this->belongsTo(Item::class, 'itemCode');
     }
 }
