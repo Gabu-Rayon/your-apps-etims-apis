@@ -23,6 +23,7 @@ class CreatePurchaseItemsTable extends Migration
             $table->timestamps();
 
             $table->foreign('purchase_id')->references('id')->on('purchases')->onDelete('cascade');
+            $table->foreign('itemCode')->references('itemCode')->on('items')->onDelete('cascade');
         });
     }
 
