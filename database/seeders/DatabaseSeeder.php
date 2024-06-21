@@ -16,17 +16,12 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
-        ]);
 
         $this->call(CodeSeeder::class);
         $this->call(DetailSeeder::class);
         $this->call(ItemClassificationSeeder::class);
         $this->call(NoticeSeeder::class);
+         $this->call(ApiKeySeeder::class);
     }
 
 }

@@ -33,7 +33,7 @@ class NoticeSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            Notice::create($item);
+            Notice::firstOrCreate($item);
         }
     }
 }

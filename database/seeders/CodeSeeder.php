@@ -13,7 +13,7 @@ class CodeSeeder extends Seeder
      */
     public function run(): void
     {
-        Code::create([
+        Code::firstOrCreate([
             'cdCls' => 'A1',
             'cdClsNm' => 'Class A1',
             'cdClsDesc' => 'Description for Class A1',
