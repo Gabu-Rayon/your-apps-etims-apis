@@ -33,7 +33,7 @@ class ItemClassificationSeeder extends Seeder
         ];
 
         foreach ($data as $item) {
-            ItemClassification::create($item);
+            ItemClassification::firstOrCreate($item);
         }
     }
 }

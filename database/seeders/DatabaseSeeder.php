@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
         $this->call(DetailSeeder::class);
         $this->call(ItemClassificationSeeder::class);
         $this->call(NoticeSeeder::class);
+         $this->call(ApiKeySeeder::class);
     }
 
 }

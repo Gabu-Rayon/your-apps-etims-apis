@@ -13,7 +13,7 @@ class DetailSeeder extends Seeder
      */
     public function run(): void
     {
-        Detail::create([
+        Detail::firstOrCreate([
             'cdCls' => 'A1',
             'cd' => 'CD001',
             'cdNm' => 'Code Name 1',
@@ -25,7 +25,7 @@ class DetailSeeder extends Seeder
             'userDfnCd3' => 'User Defined Code 3A'
         ]);
 
-        Detail::create([
+        Detail::firstOrCreate([
             'cdCls' => 'A1',
             'cd' => 'CD002',
             'cdNm' => 'Code Name 2',
