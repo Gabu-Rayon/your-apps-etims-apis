@@ -8,6 +8,8 @@ Illuminate\Http\Request;
 use App\Models\MappingPurchase;
 use Illuminate\Support\Facades\Log;
 use App\Models\MappingPurchaseItemList;
+use GuzzleHttp\Psr7\Query;
+use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 
 class MappingPurchaseController extends Controller
@@ -44,7 +46,7 @@ class MappingPurchaseController extends Controller
 
             foreach ($data['itemPurchases'] as $item) {
                 $mappedPurchaseItem = new MappingPurchaseItemList([
-                    'mapped_purchase_id' => $mappedPurchase->id,
+                    'mapping_purchase_id' => $mappedPurchase->id,
                     'supplierItemCode' => $item['supplierItemCode'],
                     'itemCode' => $item['itemCode'],
                     'mapQuantity' => $item['mapQuantity'],
@@ -77,7 +79,16 @@ class MappingPurchaseController extends Controller
                     ]
                 ]
             ]);
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
+            Log::error('Failed to Map Purchase');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to Map Purchase',
+                'error' => 'Purchase Status Code or Item Code does not exist in the database'
+            ], 500);
+        }
+        
+        catch (Exception $e) {
             Log::error('Failed to Map Purchase');
             Log::error($e);
             return response()->json([
