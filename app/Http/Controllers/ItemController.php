@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Item;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
@@ -127,7 +128,25 @@ class ItemController extends Controller
                 ]
             ]);
 
-        } catch (Exception $e) {
+        } catch (QueryException $e) {
+            Log::error('Failed to create item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to create item',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        
+        catch (Exception $e) {
+            Log::error('Failed to create item');
+            Log::error($e);
+            return response()->json([
+                'message' => 'Failed to create item',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+        
+        catch (Exception $e) {
             Log::error('Failed to add item');
             Log::error($e);
             return response()->json([
