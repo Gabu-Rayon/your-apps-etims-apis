@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Purchase;
 use Exception;
 
 use Carbon\Carbon;
@@ -32,28 +33,25 @@ class UpdateMapPurchaseStatusController extends Controller
             Log::info('Request data');
             Log::info($data);
 
-            $updateStatus = UpdateMapPurchaseStatus::updateOrCreate(
-                ['invoiceNo' => $data['invoiceNo']],
-                ['isUpdate' => $data['isUpdate']]
-            );
+            $purchaseToUpdate = Purchase::where('supplierInvcNo', $data['invoiceNo'])
+                ->first();
 
-            $now = Carbon::now();
+            if (!$purchaseToUpdate) {
+                return response()->json([
+                    'message' => 'Purchase not found',
+                    'error' => 'Purchase not found in the database'
+                ], 404);
+            }
 
-            Log::info('Mapped Purchase status updated successfully !');
-            Log::info($updateStatus);
+            $purchaseToUpdate->mapping = $data['isUpdate'];
+
+            $purchaseToUpdate->save();
 
             return response()->json([
-                'message' => 'success',
-                'data' => [
-                    "resultCd" => "000",
-                    "resultMsg" => "Successful",
-                    "resultDt" => $now,
-                    "data" => [
-                        'invoiceNo' => $updateStatus->invoiceNo,
-                        'isUpdate' => $updateStatus->isUpdate,
-                    ]
-                ]
-            ]);
+                'statusCode' => 200,
+                'message'=> 'Success',
+                'data' => null
+            ], 200);
         } catch (Exception $e) {
             Log::error('Failed to update Mapped purchase status ! ');
             Log::error($e);
