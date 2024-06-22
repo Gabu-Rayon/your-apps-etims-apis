@@ -5,10 +5,9 @@ use Carbon\Carbon;
 use
 
 Illuminate\Http\Request;
-use App\Models\MappingPurchase;
 use Illuminate\Support\Facades\Log;
-use App\Models\MappingPurchaseItemList;
-use GuzzleHttp\Psr7\Query;
+use App\Models\Purchase;
+use App\Models\PurchaseItem;
 use Illuminate\Database\QueryException;
 use Illuminate\Support\Facades\Validator;
 
@@ -38,47 +37,46 @@ class MappingPurchaseController extends Controller
             Log::info('Request data');
             Log::info($data);
 
-            $mappedPurchase = MappingPurchase::create([
-                'supplierInvcNo' => $data['supplierInvcNo'],
-                'purchaseTypeCode' => $data['purchaseTypeCode'],
-                'purchaseStatusCode' => $data['purchaseStatusCode']
-            ]);
+            $purchaseToMap = Purchase::where('supplierInvcNo', $data['supplierInvcNo'])
+                ->where('purchTypeCode', $data['purchaseTypeCode'])
+                ->where('purchStatusCode', $data['purchaseStatusCode'])
+                ->first();
 
-            foreach ($data['itemPurchases'] as $item) {
-                $mappedPurchaseItem = new MappingPurchaseItemList([
-                    'mapping_purchase_id' => $mappedPurchase->id,
-                    'supplierItemCode' => $item['supplierItemCode'],
-                    'itemCode' => $item['itemCode'],
-                    'mapQuantity' => $item['mapQuantity'],
-                ]);
-                $mappedPurchaseItem->save();
+            if (!$purchaseToMap) {
+                return response()->json([
+                    'message' => 'Purchase not found',
+                    'error' => 'Purchase not found in the database'
+                ], 404);
             }
 
-            $mappedPurchase = MappingPurchase::with('itemPurchases')->find($mappedPurchase->id);
 
-            Log::info('New Purchase Mapped successfully');
-            Log::info($mappedPurchase);
+            foreach ($data['itemPurchases'] as $itemPurchase) {
+                $item = PurchaseItem::where('itemCode', $itemPurchase['itemCode'])
+                    ->where('supplrItemCode', $itemPurchase['supplierItemCode'])
+                    ->where('purchase_id', $purchaseToMap->id)
+                    ->first();
+
+                if (!$item) {
+                    return response()->json([
+                        'message' => 'Item not found',
+                        'error' => 'Item not found in the database'
+                    ], 404);
+                }
+
+                $item->quantity = $itemPurchase['mapQuantity'];
+            }
+
+            $purchaseToMap->mapping = true;
+
+            $purchaseToMap->save();
 
             return response()->json([
-                'message' => 'success',
-                'data' => [
-                    "resultCd" => "000",
-                    "resultMsg" => "Successful",
-                    "resultDt" => Carbon::now(),
-                    "data" => [
-                        'supplierInvcNo' => $mappedPurchase->supplierInvcNo,
-                        'purchaseTypeCode' => $mappedPurchase->purchaseTypeCode,
-                        'purchaseStatusCode' => $mappedPurchase->purchaseStatusCode,
-                        'itemPurchases' => $mappedPurchase->itemPurchases->map(function ($item) {
-                            return [
-                                'supplierItemCode' => $item->supplierItemCode,
-                                'itemCode' => $item->itemCode,
-                                'mapQuantity' => $item->mapQuantity,
-                            ];
-                        })->toArray(),
-                    ]
-                ]
-            ]);
+                'statusCode' => 200,
+                'message'=> 'Success',
+                'data' => null
+            ], 200);
+
+
         } catch (QueryException $e) {
             Log::error('Failed to Map Purchase');
             Log::error($e);
