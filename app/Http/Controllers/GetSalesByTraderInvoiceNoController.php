@@ -25,24 +25,18 @@ class GetSalesByTraderInvoiceNoController extends Controller
 
             $now = date('YmdHis');
             // Check if the traderInvoiceNo exists
-            if ($traderInvoiceNo) {
-                // return response()->json([
-                //     // 'success' => true,
-                //     // "resultCd" => "000",
-                //     // "resultMsg" => "Successful",
-                //     // "resultDt" => $now,
-                //     // 'data' => $traderInvoiceNo,
-                //     $traderInvoiceNo
-                // ], 200);
-                return  $traderInvoiceNo;
-                
-            } else {
+            if (!$traderInvoiceNo) {
                 return response()->json([
                     'success' => false,
-                    
                     'message' => 'Sales Trader Invoice No not found !',
                 ], 404);
             }
+
+            return response()->json([
+                'statusCode' => 200,
+                'message' => 'Sales retrieved successfully',
+                'data' => $traderInvoiceNo
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
                 'statusCode' => 500,

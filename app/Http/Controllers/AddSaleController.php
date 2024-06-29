@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Validator;
 use App\Models\AddSale;
 use App\Models\AddSaleItemList;
 use Exception;
-use Log;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Log;
 
 class AddSaleController extends Controller
 {
