@@ -4,11 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Purchase;
 use Exception;
-
-use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
-use App\Models\UpdateMapPurchaseStatus;
 use Illuminate\Support\Facades\Validator;
 
 class UpdateMapPurchaseStatusController extends Controller
@@ -38,7 +35,6 @@ class UpdateMapPurchaseStatusController extends Controller
 
             if (!$purchaseToUpdate) {
                 return response()->json([
-                    'message' => 'Purchase not found',
                     'error' => 'Purchase not found in the database'
                 ], 404);
             }
@@ -50,7 +46,7 @@ class UpdateMapPurchaseStatusController extends Controller
             return response()->json([
                 'statusCode' => 200,
                 'message'=> 'Success',
-                'data' => null
+                'data' => $purchaseToUpdate
             ], 200);
         } catch (Exception $e) {
             Log::error('Failed to update Mapped purchase status ! ');

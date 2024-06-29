@@ -18,12 +18,12 @@ class MappingPurchaseController extends Controller
             $data = $request->all();
 
             $validator = Validator::make($data, [
-                'supplierInvcNo' => 'required|string',
-                'purchaseTypeCode' => 'required|string',
+                'supplierInvcNo' => 'nullable|string',
+                'purchaseTypeCode' => 'nullable|string',
                 'purchaseStatusCode' => 'required|string',
                 'itemPurchases' => 'required|array',
-                'itemPurchases.*.supplierItemCode' => 'required|string',
-                'itemPurchases.*.itemCode' => 'required|string',
+                'itemPurchases.*.supplierItemCode' => 'nullable|string',
+                'itemPurchases.*.itemCode' => 'nullable|string|exists:items,itemCode',
                 'itemPurchases.*.mapQuantity' => 'required|integer',
             ]);
 
@@ -63,7 +63,7 @@ class MappingPurchaseController extends Controller
                     ], 404);
                 }
 
-                $item->quantity = $itemPurchase['mapQuantity'];
+                $item->quantity += $itemPurchase['mapQuantity'];
             }
 
             $purchaseToMap->mapping = true;
