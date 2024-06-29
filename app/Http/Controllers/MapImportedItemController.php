@@ -17,16 +17,15 @@ class MapImportedItemController extends Controller
         try {
             $data = $request->all();
             $validator = Validator::make($data, [
-                'importItemStatusCode' => 'required|numeric',
-                'declarationDate' => 'required|string',
-                'occurredDate' => 'required|string',
-                'remark' => 'required|string',
+                'importItemStatusCode' => 'required|numeric|exists:imported_item_status_codes,code',
+                'declarationDate' => 'required|date|date_format:Ymd',
+                'occurredDate' => 'required|date|date_format:Ymd',
+                'remark' => 'nullable|string',
                 'importedItemLists' => 'required|array',
-                'importedItemLists.*.taskCode' => 'required|string',
-                'importedItemLists.*.itemCode' => 'required|string',
+                'importedItemLists.*.taskCode' => 'required|string|min:1|max:50|exists:mapped_imported_item_lists,taskCode',
+                'importedItemLists.*.itemCode' => 'required|string|min:1|max:40|exists:items,itemCode',
             ]);
 
-            // Return validation errors if any
             if ($validator->fails()) {
                 return response()->json([
                     'message' => 'Validation failed',
@@ -36,7 +35,6 @@ class MapImportedItemController extends Controller
 
             Log::info('Request data', $data);
 
-            // Create the MappedImportedItem
             $mappedImportedItem = MappedImportedItem::create([
                 'importItemStatusCode' => $data['importItemStatusCode'],
                 'declarationDate' => $data['declarationDate'],
@@ -44,7 +42,6 @@ class MapImportedItemController extends Controller
                 'remark' => $data['remark']
             ]);
 
-            // Create associated MappedImportedItemList entries
             foreach ($data['importedItemLists'] as $item) {
                 MappedImportedItemList::create([
                     'mapped_imported_item_id' => $mappedImportedItem->id,
@@ -53,7 +50,6 @@ class MapImportedItemController extends Controller
                 ]);
             }
 
-            // Reload the MappedImportedItem with its items
             $mappedImportedItem->load('importedItemLists');
 
             Log::info('New Imported Mapped successfully', ['item' => $mappedImportedItem]);
